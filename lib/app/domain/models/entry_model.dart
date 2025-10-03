@@ -1,12 +1,20 @@
 /// Model per emmagatzemar entrades xifrades a Firestore
 class EntryModel {
+  final String id;
   final int version;
-  final String box; // Base64(nonce||ciphertext||tag)
+  final String data;
 
-  const EntryModel({required this.version, required this.box});
+  const EntryModel({
+    required this.id,
+    required this.version,
+    required this.data,
+  });
 
-  Map<String, dynamic> toJson() => {'v': version, 'box': box};
+  factory EntryModel.fromJson(Map<String, dynamic> json) => EntryModel(
+    id: json['id'] ?? '',
+    version: json['v'] ?? 0,
+    data: json['box'] ?? '',
+  );
 
-  factory EntryModel.fromJson(Map<String, dynamic> json) =>
-      EntryModel(version: json['v'] as int, box: json['box'] as String);
+  Map<String, dynamic> toJson() => {'id': id, 'v': version, 'box': data};
 }

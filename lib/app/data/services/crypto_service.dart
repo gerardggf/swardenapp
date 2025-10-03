@@ -73,7 +73,7 @@ class CryptoService {
   }
 
   /// REGISTRE: Crea una nova bòvada d'usuari
-  UserModel createUserVault(String password) {
+  (String, String) createUserVault(String password) {
     try {
       if (password.isEmpty) {
         throw CryptoException('La contrasenya és requerida');
@@ -92,7 +92,7 @@ class CryptoService {
       final nonce = generateNonce();
       final dekBox = _encryptAEAD(base64Encode(dek.bytes), kek, nonce);
 
-      return UserModel(version: Crypto.version, salt: salt, dekBox: dekBox);
+      return (salt, dekBox);
     } catch (e) {
       throw CryptoException('Error creant bòvada d\'usuari: $e');
     }
@@ -147,7 +147,7 @@ class CryptoService {
         additionalData,
       );
 
-      return EntryModel(version: Crypto.version, box: box);
+      return EntryModel(id: '', version: Crypto.version, data: box);
     } catch (e) {
       throw CryptoException('Error xifrant entrada: $e');
     }
@@ -160,7 +160,7 @@ class CryptoService {
     }
 
     try {
-      return _decryptAEAD(entryBox.box, _vaultSession!.dek, additionalData);
+      return _decryptAEAD(entryBox.data, _vaultSession!.dek, additionalData);
     } catch (e) {
       throw CryptoException('Error desxifrant entrada: $e');
     }

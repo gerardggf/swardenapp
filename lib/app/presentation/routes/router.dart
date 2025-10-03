@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
 import 'package:swardenapp/app/presentation/modules/auth/login_view.dart';
 import 'package:swardenapp/app/presentation/modules/auth/register_view.dart';
