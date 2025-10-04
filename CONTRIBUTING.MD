@@ -28,10 +28,8 @@ Gràcies per voler contribuir a Swarden! Aquest document explica com reportar pr
 
 ## Llicència de contribucions
 
-En enviar un PR, acceptes que la teva contribució es publiqui sota la llicència del projecte (Apache-2.0). No aportis contingut que no puguis llicenciar.
+Al enviar un PR, acceptes que la teva contribució es publiqui sota la llicència del projecte (Apache-2.0). No aportis contingut que no puguis llicenciar.
 
-## Seguretat
 
-No reportis vulnerabilitats en públic. Segueix la nostra [política de seguretat](SECURITY.md) per a disclosure responsable.
 
 Gràcies per fer Swarden millor!

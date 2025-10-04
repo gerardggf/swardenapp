@@ -6,6 +6,7 @@ import 'package:swardenapp/app/core/global_providers.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
 import 'package:swardenapp/app/presentation/global/widgets/loading_widget.dart';
 import 'package:swardenapp/app/presentation/routes/router.dart';
+import 'package:swardenapp/app/presentation/theme.dart';
 import '../core/generated/translations.g.dart';
 
 /// Provider per inicialitzar l'aplicació i carregar les dependències necessàries abans d'iniciar
@@ -49,6 +50,7 @@ class SwardenApp extends ConsumerWidget {
       locale: TranslationProvider.of(context).flutterLocale,
       // Configuració de les rutes
       routerConfig: ref.watch(goRouterProvider),
+      theme: SwardenTheme.theme,
     );
   }
 }

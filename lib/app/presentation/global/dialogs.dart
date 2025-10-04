@@ -6,10 +6,11 @@ class SwardenDialogs {
   SwardenDialogs._();
 
   /// Barra de notificació inferior
-  static void snackBar({
-    required BuildContext context,
-    required String text,
-    Color? color,
+  static void snackBar(
+    BuildContext context,
+    String text, {
+    bool isError = false,
+    bool isWarning = false,
     int milliseconds = 3000,
   }) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -18,18 +19,13 @@ class SwardenDialogs {
       SnackBar(
         behavior: SnackBarBehavior.fixed,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        content: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: color,
-            border: color != null
-                ? null
-                : Border.all(width: 1, color: Colors.white),
-          ),
-          child: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
+        backgroundColor: isWarning
+            ? Colors.orange
+            : isError
+            ? Colors.red
+            : Colors.blue,
+        content: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
+
         duration: Duration(milliseconds: milliseconds),
       ),
     );

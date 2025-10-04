@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217766266293",
+    "project_id": "swardenapp-de2be",
+    "storage_bucket": "swardenapp-de2be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217766266293:android:01111a0ce265fe183185fc",
+        "android_client_info": {
+          "package_name": "com.gerardggf.swardenapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9p2jw06xcxgbP5zXO7zFcADpAb22orEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

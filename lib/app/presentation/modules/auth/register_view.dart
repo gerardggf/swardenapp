@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:swardenapp/app/core/constants/colors.dart';
+import 'package:swardenapp/app/core/constants/urls.dart';
+import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
+import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
+import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import '../../controllers/session_controller.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
@@ -16,223 +24,378 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   bool _isLoading = false;
   bool _acceptsPrivacyPolicy = false;
+  bool _obscurePswrd = true;
+  bool _obscureConfirmPswrd = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrar-se'), centerTitle: true),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 32),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: FloatingActionButton(
+          shape: CircleBorder(),
+          backgroundColor: AppColors.primary,
+          onPressed: () {
+            context.pop();
+          },
+          child: Icon(Icons.chevron_left, color: Colors.white, size: 30),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppColors.primary.withAlpha(24), Colors.white],
+          ),
+        ),
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    40.h,
 
-                // Logo o títol
-                const Icon(
-                  Icons.person_add_outlined,
-                  size: 80,
-                  color: Colors.blue,
-                ),
-                const SizedBox(height: 32),
-
-                // Camp email
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                    helperText: 'Aquest serà el teu identificador únic',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Introdueix el teu email';
-                    }
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(value)) {
-                      return 'Introdueix un email vàlid';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Camp contrasenya
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contrasenya',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                    helperText: 'Mínim 6 caràcters',
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Introdueix una contrasenya';
-                    }
-                    if (value.length < 6) {
-                      return 'La contrasenya ha de tenir almenys 6 caràcters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Camp confirmar contrasenya
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirmar Contrasenya',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Confirma la teva contrasenya';
-                    }
-                    if (value != _passwordController.text) {
-                      return 'Les contrasenyes no coincideixen';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Avís important sobre la contrasenya
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
-                    border: Border.all(color: Colors.orange.shade200),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.warning_amber, color: Colors.orange.shade700),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          '⚠️ IMPORTANT: La contrasenya no es podrà canviar després del registre. Assegura\'t que la recordis!',
-                          style: TextStyle(
-                            color: Colors.orange.shade700,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
+                    // Logo i títol principal
+                    Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withAlpha(24),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.person_add_outlined, size: 60),
+                        ),
+                        24.h,
+                        Text(
+                          'Crea el teu compte',
+                          style: context.headlineThemeM?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Checkbox política de privacitat
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: _acceptsPrivacyPolicy,
-                      onChanged: (value) {
-                        setState(() {
-                          _acceptsPrivacyPolicy = value ?? false;
-                        });
-                      },
+                        8.h,
+                        Text(
+                          'Registra\'t per comen\u00e7ar a gestionar les teves contrasenyes de forma segura',
+                          style: context.bodyThemeM?.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _acceptsPrivacyPolicy = !_acceptsPrivacyPolicy;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
-                          child: RichText(
-                            text: TextSpan(
-                              style: DefaultTextStyle.of(context).style,
+                    40.h,
+
+                    // Camp email
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: AppColors.primary,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade50,
+                        helperText: 'Aquest serà el teu identificador únic',
+                        helperStyle: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => Validators.validateEmail(value),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    20.h,
+
+                    // Camp contrasenya
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'Contrasenya',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock_outlined,
+                          color: AppColors.primary,
+                        ),
+                        suffixIcon: InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            setState(() {
+                              _obscurePswrd = !_obscurePswrd;
+                            });
+                          },
+                          child: Icon(
+                            _obscurePswrd
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade50,
+                        helperText: 'Mínim 6 caràcters',
+                        helperStyle: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      obscureText: _obscurePswrd,
+                      validator: (value) => Validators.validatePassword(value),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    20.h,
+
+                    // Camp confirmar contrasenya
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      decoration: InputDecoration(
+                        hintText: 'Confirmar Contrasenya',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        suffixIcon: InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            setState(() {
+                              _obscureConfirmPswrd = !_obscureConfirmPswrd;
+                            });
+                          },
+                          child: Icon(
+                            _obscureConfirmPswrd
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock_outline,
+                          color: AppColors.primary,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade50,
+                      ),
+                      obscureText: _obscureConfirmPswrd,
+                      validator: (value) => Validators.validateConfirmPassword(
+                        value,
+                        _passwordController.text,
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    24.h,
+
+                    // Avís important sobre la contrasenya
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade50,
+                        border: Border.all(
+                          color: Colors.orange.shade300,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.shade100,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.warning_amber,
+                              color: Colors.orange.shade700,
+                              size: 20,
+                            ),
+                          ),
+                          10.w,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const TextSpan(text: 'Accepto la '),
-                                TextSpan(
-                                  text: 'Política de Privacitat',
+                                Text(
+                                  'IMPORTANT',
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    decoration: TextDecoration.underline,
-                                    fontWeight: FontWeight.w500,
+                                    color: Colors.orange.shade700,
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 14,
                                   ),
                                 ),
-                                const TextSpan(text: ' i els '),
-                                TextSpan(
-                                  text: 'Termes d\'Ús',
+                                Text(
+                                  'La contrasenya no es podrà canviar després del registre. Assegura\'t que la recordis!',
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    decoration: TextDecoration.underline,
+                                    color: Colors.orange.shade700,
                                     fontWeight: FontWeight.w500,
+                                    fontSize: 13,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                    20.h,
 
-                // Botó de registre
-                ElevatedButton(
-                  onPressed: (_isLoading || !_acceptsPrivacyPolicy)
-                      ? null
-                      : _register,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    backgroundColor: _acceptsPrivacyPolicy
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey.shade400,
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                    // Checkbox política de privacitat
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _acceptsPrivacyPolicy,
+                          onChanged: (value) {
+                            setState(() {
+                              _acceptsPrivacyPolicy = value ?? false;
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _acceptsPrivacyPolicy = !_acceptsPrivacyPolicy;
+                              });
+                            },
+                            child: InkWell(
+                              onTap: () {
+                                launchCustomUrl(Urls.privacyPolicy);
+                              },
+                              child: RichText(
+                                text: TextSpan(
+                                  style: context.bodyThemeM,
+                                  children: [
+                                    const TextSpan(
+                                      text: 'He llegit i accepto la ',
+                                    ),
+                                    TextSpan(
+                                      text: 'Política de Privacitat',
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: AppColors.primary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const TextSpan(text: '.'),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        )
-                      : const Text(
-                          'Registrar-se',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                    24.h,
+
+                    // Botó de registre
+                    Container(
+                      width: double.infinity,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        gradient: _acceptsPrivacyPolicy
+                            ? LinearGradient(
+                                colors: [
+                                  AppColors.primary,
+                                  AppColors.primary.withAlpha(180),
+                                ],
+                              )
+                            : null,
+                        color: _acceptsPrivacyPolicy
+                            ? null
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: _acceptsPrivacyPolicy
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.primary.withAlpha(40),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: ElevatedButton(
+                        onPressed: (_isLoading || !_acceptsPrivacyPolicy)
+                            ? null
+                            : _register,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                ),
-                const SizedBox(height: 16),
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                'Registrar-se',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: _acceptsPrivacyPolicy
+                                      ? Colors.white
+                                      : Colors.grey.shade600,
+                                ),
+                              ),
+                      ),
+                    ),
 
-                // Enllaç per iniciar sessió
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Ja tens compte? Inicia sessió'),
+                    60.h,
+                  ],
                 ),
-                const SizedBox(height: 32),
-              ],
+              ),
             ),
           ),
         ),
@@ -246,13 +409,10 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     }
 
     if (!_acceptsPrivacyPolicy) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Has d\'acceptar la Política de Privacitat per continuar',
-          ),
-          backgroundColor: Colors.red,
-        ),
+      SwardenDialogs.snackBar(
+        context,
+        'Has d\'acceptar la Política de Privacitat per continuar',
+        isWarning: true,
       );
       return;
     }
@@ -273,34 +433,25 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       final user = ref.read(sessionNotifierProvider);
       if (user != null) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registre exitós! Benvingut!'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          SwardenDialogs.snackBar(context, "T'has registrat correctament!");
           // Tornar a la pantalla anterior o navegar a home
-          Navigator.of(context).pop();
+          context.pop();
         }
       } else {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Error en el registre. Aquest email potser ja està en ús.',
-              ),
-              backgroundColor: Colors.red,
-            ),
+          SwardenDialogs.snackBar(
+            context,
+            'S\'ha produït un error en el registre. Aquest email potser ja està en ús.',
+            isError: true,
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
+        SwardenDialogs.snackBar(
+          context,
+          'Error: ${e.toString()}',
+          isError: true,
         );
       }
     } finally {
