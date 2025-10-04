@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/urls.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
+import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/domain/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
@@ -98,6 +100,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
                     // Camp email
                     TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Email',
@@ -132,6 +136,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
                     // Camp contrasenya
                     TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Contrasenya',
@@ -180,6 +186,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
                     // Camp confirmar contrasenya
                     TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _confirmPasswordController,
                       decoration: InputDecoration(
                         hintText: 'Confirmar Contrasenya',
@@ -404,6 +412,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   }
 
   Future<void> _register() async {
+    /// Validem el formulari
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -421,45 +430,26 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       _isLoading = true;
     });
 
-    try {
-      final email = _emailController.text.trim();
-      final password = _passwordController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-      await ref
-          .read(sessionNotifierProvider.notifier)
-          .register(email, password);
+    final result = await ref
+        .read(sessionControllerProvider.notifier)
+        .register(email, password);
 
-      // Comprovar si el registre ha estat exitós
-      final user = ref.read(sessionNotifierProvider);
-      if (user != null) {
-        if (mounted) {
-          SwardenDialogs.snackBar(context, "T'has registrat correctament!");
-          // Tornar a la pantalla anterior o navegar a home
-          context.pop();
-        }
-      } else {
-        if (mounted) {
-          SwardenDialogs.snackBar(
-            context,
-            'S\'ha produït un error en el registre. Aquest email potser ja està en ús.',
-            isError: true,
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        SwardenDialogs.snackBar(
-          context,
-          'Error: ${e.toString()}',
-          isError: true,
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    result.when(
+      left: (e) {
+        SwardenDialogs.snackBar(context, e.toText(), isError: true);
+      },
+      right: (user) {
+        // No fem res aquí, ja que el router redirigeix automàticament
+      },
+    );
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

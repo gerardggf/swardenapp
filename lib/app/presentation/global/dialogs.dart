@@ -32,39 +32,40 @@ class SwardenDialogs {
   }
 
   /// Diàleg genèric
-  static Future<bool?> dialog({
+  static Future<bool> dialog({
     required BuildContext context,
     required String title,
     required Widget content,
     bool showConfirmButton = true,
   }) async {
     return await showDialog<bool?>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Text(title),
-          content: content,
-          actions: [
-            TextButton(
-              onPressed: () {
-                context.pop(false);
-              },
-              child: Text(texts.global.cancel),
-            ),
-            if (showConfirmButton)
-              TextButton(
-                onPressed: () {
-                  context.pop(true);
-                },
-                child: Text(texts.global.confirm),
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-          ],
-        );
-      },
-    );
+              title: Text(title),
+              content: content,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    context.pop(false);
+                  },
+                  child: Text(texts.global.cancel),
+                ),
+                if (showConfirmButton)
+                  TextButton(
+                    onPressed: () {
+                      context.pop(true);
+                    },
+                    child: Text(texts.global.confirm),
+                  ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 
   static Future<String?> textFieldDialog({

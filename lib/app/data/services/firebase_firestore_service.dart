@@ -5,14 +5,15 @@ import 'package:swardenapp/app/core/global_providers.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/domain/models/user_model.dart';
 
-final firestoreServiceProvider = Provider<FirestoreService>(
-  (ref) => FirestoreService(firestore: ref.watch(firebaseFirestoreProvider)),
+final firebaseFirestoreServiceProvider = Provider<FirebaseFirestoreService>(
+  (ref) =>
+      FirebaseFirestoreService(firestore: ref.watch(firebaseFirestoreProvider)),
 );
 
-class FirestoreService {
+class FirebaseFirestoreService {
   final FirebaseFirestore firestore;
 
-  FirestoreService({required this.firestore});
+  FirebaseFirestoreService({required this.firestore});
 
   Future<void> createUser({required UserModel user}) async {
     try {
@@ -52,7 +53,7 @@ class FirestoreService {
   }
 
   /// Eliminar vault d'usuari
-  Future<void> deleteUser(String uid) async {
+  Future<bool> deleteUser(String uid) async {
     try {
       final entriesQuery = await firestore
           .collection(Collections.users)
@@ -69,6 +70,7 @@ class FirestoreService {
       batch.delete(firestore.collection(Collections.users).doc(uid));
 
       await batch.commit();
+      return true;
     } on FirebaseException catch (e) {
       throw 'Error eliminant vault: ${e.message}';
     }

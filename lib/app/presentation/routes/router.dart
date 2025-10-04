@@ -9,72 +9,70 @@ import 'package:swardenapp/app/presentation/modules/splash_view.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import '../../domain/models/user_model.dart';
 
-/// Provider que carga el estado del usuario actual usando authStateChanges
-final userLoaderProvider = StreamProvider<UserModel?>((ref) {
-  return FirebaseAuth.instance.authStateChanges().asyncMap((
-    firebaseUser,
-  ) async {
-    if (firebaseUser != null) {
-      // Si hay usuario en Firebase, devolver el usuario del sessionController
-      final sessionUser = ref.read(sessionNotifierProvider);
-      return sessionUser;
-    }
-    return null;
-  });
+/// Simplement escolta Firebase Auth
+final firebaseAuthStateProvider = StreamProvider<User?>((ref) {
+  return FirebaseAuth.instance.authStateChanges();
 });
 
-/// Provider que indica si la app está cargando
-final isLoadingProvider = Provider<bool>((ref) {
-  final userAsyncValue = ref.watch(userLoaderProvider);
-  return userAsyncValue.isLoading;
+/// Gestiona automàticament la càrrega de dades quan hi ha usuari de Firebase sense dades locals
+final userManagerProvider = FutureProvider<UserModel?>((ref) async {
+  final authState = ref.watch(firebaseAuthStateProvider);
+
+  return await authState.when(
+    loading: () async => null,
+    error: (error, stack) async => null,
+    data: (firebaseUser) async {
+      final sessionController = ref.read(sessionControllerProvider.notifier);
+      final currentSessionUser = ref.read(sessionControllerProvider);
+
+      if (firebaseUser != null) {
+        // Hi ha usuari autenticat a Firebase
+        if (currentSessionUser != null) {
+          // Ja tenim les dades, tot correcte
+          return currentSessionUser;
+        } else {
+          // Usuari autenticat però sense dades locals, restaurem
+          await sessionController.restoreSession();
+          return ref.read(sessionControllerProvider);
+        }
+      } else {
+        // No hi ha usuari autenticat
+        return null;
+      }
+    },
+  );
 });
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  // Hacer que el router se reconstruya cuando cambie el estado del usuario
-  ref.watch(userLoaderProvider);
+  // El router es reconstrueix quan canvia l'usuari
+  ref.watch(userManagerProvider);
 
   return GoRouter(
     errorBuilder: (context, state) => const ErrorInfoWidget(),
     initialLocation: '/splash',
     redirect: (context, state) {
-      final isLoading = ref.read(isLoadingProvider);
-      final userAsyncValue = ref.read(userLoaderProvider);
+      final userAsync = ref.read(userManagerProvider);
       final currentPath = state.uri.path;
-
-      // Si estamos cargando, mantener en splash
-      if (isLoading) {
-        return '/splash';
-      }
-
-      // Si hay error, ir a login
-      if (userAsyncValue.hasError) {
-        if (currentPath != '/login') {
-          return '/login';
-        }
-        return null;
-      }
-
-      // Si tenemos datos del usuario
-      if (userAsyncValue.hasValue) {
-        final user = userAsyncValue.value;
-
-        // Si el usuario está autenticado
-        if (user != null) {
-          // Si está en splash, auth pages, redirigir a home
-          if (currentPath == '/splash' ||
-              currentPath == '/login' ||
-              currentPath == '/register') {
-            return '/home';
+      return userAsync.when(
+        loading: () => currentPath == '/splash' ? null : '/splash',
+        error: (error, stack) => currentPath == '/login' ? null : '/login',
+        data: (user) {
+          if (user != null) {
+            // Usuari autenticat amb dades
+            if (currentPath == '/splash' ||
+                currentPath == '/login' ||
+                currentPath == '/register') {
+              return '/home';
+            }
+          } else {
+            // Sense usuari
+            if (currentPath != '/login' && currentPath != '/register') {
+              return '/login';
+            }
           }
-        } else {
-          // Si no está autenticado, ir a login
-          if (currentPath != '/login' && currentPath != '/register') {
-            return '/login';
-          }
-        }
-      }
-
-      return null;
+          return null;
+        },
+      );
     },
     routes: [
       GoRoute(

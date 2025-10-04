@@ -28,6 +28,10 @@ class SwardenTheme {
         textStyle: TextStyle(color: AppColors.primary),
       ),
     ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.primary,
+    ),
+    popupMenuTheme: PopupMenuThemeData(color: AppColors.primaryBg),
     switchTheme: SwitchThemeData(
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {

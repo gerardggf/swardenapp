@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
+import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/domain/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/modules/auth/register_view.dart';
 import '../../controllers/session_controller.dart';
@@ -83,6 +85,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                     // Camp email
                     TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Email',
@@ -124,6 +128,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                     // Camp contrasenya
                     TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Contrasenya',
@@ -256,41 +262,26 @@ class _LoginViewState extends ConsumerState<LoginView> {
       _isLoading = true;
     });
 
-    try {
-      final email = _emailController.text.trim();
-      final password = _passwordController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
-      await ref.read(sessionNotifierProvider.notifier).signIn(email, password);
+    final result = await ref
+        .read(sessionControllerProvider.notifier)
+        .signIn(email, password);
 
-      // Comprovar si l'inici de sessió ha estat exitós
-      final user = ref.read(sessionNotifierProvider);
-      if (user != null) {
-        if (mounted) {
-          SwardenDialogs.snackBar(context, 'Sessió iniciada');
-        }
-      } else {
-        if (mounted) {
-          SwardenDialogs.snackBar(
-            context,
-            'Correu electrònic o contrasenya incorrectes',
-            isError: true,
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        SwardenDialogs.snackBar(
-          context,
-          'Error: ${e.toString()}',
-          isError: true,
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    result.when(
+      left: (e) {
+        SwardenDialogs.snackBar(context, e.toText(), isError: true);
+      },
+      right: (user) {
+        // No fem res aquí, ja que el router redirigeix automàticament
+      },
+    );
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
