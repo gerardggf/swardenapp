@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/urls.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
@@ -10,6 +9,8 @@ import 'package:swardenapp/app/domain/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
+import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';
+import 'package:swardenapp/app/presentation/global/widgets/warning_widget.dart';
 import '../../controllers/session_controller.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
@@ -38,14 +39,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: FloatingActionButton(
-          shape: CircleBorder(),
-          backgroundColor: AppColors.primary,
-          onPressed: () {
-            context.pop();
-          },
-          child: Icon(Icons.chevron_left, color: Colors.white, size: 30),
-        ),
+        child: SwardenBackButton(),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -234,58 +228,11 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     24.h,
-
-                    // Avís important sobre la contrasenya
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
-                        border: Border.all(
-                          color: Colors.orange.shade300,
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.orange.shade100,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.warning_amber,
-                              color: Colors.orange.shade700,
-                              size: 20,
-                            ),
-                          ),
-                          10.w,
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'IMPORTANT',
-                                  style: TextStyle(
-                                    color: Colors.orange.shade700,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  'La contrasenya no es podrà canviar després del registre. Assegura\'t que la recordis!',
-                                  style: TextStyle(
-                                    color: Colors.orange.shade700,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    WarningWidget(
+                      title: 'IMPORTANT',
+                      content:
+                          'La contrasenya no es podrà canviar després del registre. Assegura\'t que la recordis!',
+                      icon: Icons.warning_amber,
                     ),
                     20.h,
 

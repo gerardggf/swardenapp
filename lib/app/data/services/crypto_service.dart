@@ -17,6 +17,20 @@ final cryptoServiceProvider = Provider<CryptoService>((ref) => CryptoService());
 class CryptoService {
   SessionModel? _vaultSession;
 
+  /// Retorna true si la boveda està desblocada
+  bool get isVaultUnlocked => _vaultSession != null;
+
+  /// Genera un ID únic al crear una nova entrada
+  String generateId() {
+    final random = Random.secure();
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    return List.generate(
+      20,
+      (index) => chars[random.nextInt(chars.length)],
+    ).join();
+  }
+
   /// Genera un salt únic per usuari (només al crear compte)
   String generateUserSalt() {
     final random = Random.secure();
@@ -72,7 +86,7 @@ class CryptoService {
     }
   }
 
-  /// REGISTRE: Crea una nova bòvada d'usuari
+  /// REGISTRE: Crea una nova bóveda d'usuari
   (String, String) createUserVault(String password) {
     try {
       if (password.isEmpty) {
@@ -94,26 +108,26 @@ class CryptoService {
 
       return (salt, dekBox);
     } catch (e) {
-      throw CryptoException('Error creant bòvada d\'usuari: $e');
+      throw CryptoException('Error creant bóveda d\'usuari: $e');
     }
   }
 
-  /// INICI DE SESSIÓ: Desbloqueja la bòvada amb la contrasenya
-  bool unlockVault(String password, UserModel userVault) {
+  /// INICI DE SESSIÓ: Desbloqueja les entrades amb la contrasenya
+  bool unlock(String password, UserModel user) {
     try {
       if (password.isEmpty) {
         throw CryptoException('La contrasenya és requerida');
       }
 
       // 1. Deriva KEK amb la contrasenya i salt de l'usuari
-      final kek = _deriveKEK(password, userVault.salt);
+      final kek = _deriveKEK(password, user.salt);
 
       // 2. Desxifra la DEK
-      final dekBase64 = _decryptAEAD(userVault.dekBox, kek);
+      final dekBase64 = _decryptAEAD(user.dekBox, kek);
       final dekBytes = base64Decode(dekBase64);
       final dek = Key(dekBytes);
 
-      // 3. Crea sessió de bòvada amb la DEK en memòria
+      // 3. Crea sessió de bóveda amb la DEK en memòria
       _vaultSession = SessionModel.create(dek);
 
       return true;
@@ -123,47 +137,81 @@ class CryptoService {
     }
   }
 
-  /// Comprova si la bòvada està desblocada
-  bool get isVaultUnlocked => _vaultSession != null && !_vaultSession!.isLocked;
+  /// Comprova si la bóveda està desblocada
+  bool get isUnlocked => _vaultSession != null && !_vaultSession!.isLocked;
 
-  /// Bloqueja la bòvada (esborra la DEK de la memòria)
-  void lockVault() {
+  /// Bloqueja la bóveda (esborra la DEK de la memòria)
+  void lock() {
     _vaultSession?.lock();
     _vaultSession = null;
   }
 
-  /// CREAR ENTRADA: Xifra una entrada amb la DEK de la sessió
-  EntryModel encryptEntry(String plaintext, [String? additionalData]) {
-    if (!isVaultUnlocked) {
+  /// Xifra EntryDataModel i retorna EntryModel
+  EntryModel encryptEntryData(EntryDataModel entryData, String entryId) {
+    if (!isUnlocked) {
       throw const LockedException();
     }
 
     try {
-      final nonce = generateNonce();
-      final box = _encryptAEAD(
-        plaintext,
-        _vaultSession!.dek,
-        nonce,
-        additionalData,
-      );
+      // Converteix EntryDataModel a JSON string
+      final plaintext = _entryDataToJson(entryData.toJson());
 
-      return EntryModel(id: '', version: Crypto.version, data: box);
+      // Xifra el contingut
+      final nonce = generateNonce();
+      final box = _encryptAEAD(plaintext, _vaultSession!.dek, nonce);
+
+      return EntryModel(id: entryId, data: box);
     } catch (e) {
-      throw CryptoException('Error xifrant entrada: $e');
+      throw CryptoException('Error xifrant EntryDataModel: $e');
     }
   }
 
-  /// LLEGIR ENTRADA: Desxifra una entrada amb la DEK de la sessió
-  String decryptEntry(EntryModel entryBox, [String? additionalData]) {
-    if (!isVaultUnlocked) {
+  /// Desxifra EntryModel i retorna  EntryDataModel
+  EntryDataModel decryptEntryData(EntryModel entryModel) {
+    if (!isUnlocked) {
       throw const LockedException();
     }
 
     try {
-      return _decryptAEAD(entryBox.data, _vaultSession!.dek, additionalData);
+      // Desxifra el contingut
+      final plaintext = _decryptAEAD(entryModel.data, _vaultSession!.dek);
+
+      // Converteix de JSON string a Map
+      final dataMap = _entryDataFromJson(plaintext);
+
+      // Retorna EntryDataModel
+      return EntryDataModel.fromJson(dataMap).copyWith(id: entryModel.id);
     } catch (e) {
-      throw CryptoException('Error desxifrant entrada: $e');
+      throw CryptoException('Error desxifrant EntryModel: $e');
     }
+  }
+
+  // Mètodes auxiliars per conversió de dades
+  String _entryDataToJson(Map<String, dynamic> data) {
+    final buffer = StringBuffer();
+    buffer.write('title=${data['title'] ?? ''}\n');
+    buffer.write('username=${data['username'] ?? ''}\n');
+    buffer.write('password=${data['password'] ?? ''}\n');
+    buffer.write(
+      'createdAt=${data['createdAt'] ?? DateTime.now().toIso8601String()}',
+    );
+    return buffer.toString();
+  }
+
+  Map<String, dynamic> _entryDataFromJson(String plaintext) {
+    final lines = plaintext.split('\n');
+    final data = <String, dynamic>{};
+
+    for (final line in lines) {
+      final parts = line.split('=');
+      if (parts.length >= 2) {
+        final key = parts[0];
+        final value = parts.sublist(1).join('='); // Per si el valor conté '='
+        data[key] = value;
+      }
+    }
+
+    return data;
   }
 
   /// Operació AEAD interna: xifra amb AES-GCM
@@ -219,6 +267,6 @@ class CryptoService {
 
   /// Neteja la sessió de memòria
   void dispose() {
-    lockVault();
+    lock();
   }
 }

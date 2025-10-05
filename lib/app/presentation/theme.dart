@@ -31,6 +31,8 @@ class SwardenTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primary,
     ),
+    cardColor: AppColors.primaryBg,
+    cardTheme: CardThemeData(color: AppColors.primaryBg),
     popupMenuTheme: PopupMenuThemeData(color: AppColors.primaryBg),
     switchTheme: SwitchThemeData(
       trackColor: WidgetStateProperty.resolveWith((states) {

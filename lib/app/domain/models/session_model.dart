@@ -1,7 +1,7 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:swardenapp/app/core/exceptions/locked_exception.dart';
 
-/// Model per guardar a la RAM la sessió de la bòvada amb la DEK en memòria
+/// Model per guardar a la RAM la sessió de la bóveda amb la DEK en memòria
 class SessionModel {
   /// Clau d'encriptació de les dades
   final Key _dek;

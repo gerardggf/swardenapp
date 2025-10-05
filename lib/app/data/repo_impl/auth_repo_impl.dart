@@ -22,15 +22,12 @@ class AuthRepoImpl implements AuthRepo {
   @override
   AsyncSwardenResult<UserModel?> register(String email, String password) async {
     try {
-      // Crear usuari a Firebase Auth
       final credentialEither = await firebaseAuthService
           .registerWithEmailAndPassword(email: email, password: password);
 
       return credentialEither.when(
         left: (exception) => Either.left(exception),
         right: (cred) async {
-          // Crear element del usuari a Firestore
-          // Retornar salt i dekBox
           final vaultData = cryptoService.createUserVault(password);
           final user = UserModel(
             uid: cred.user!.uid,
@@ -64,6 +61,16 @@ class AuthRepoImpl implements AuthRepo {
           if (user == null) {
             return Either.left(SwardenException.userNotFound());
           }
+
+          final unlockSuccess = cryptoService.unlock(password, user);
+          if (!unlockSuccess) {
+            if (kDebugMode) {
+              print(
+                'Warning: No s\'ha pogut desbloquejar la bòveda automàticament',
+              );
+            }
+          }
+
           return Either.right(user);
         },
       );
@@ -78,6 +85,8 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<bool> signOut() async {
     try {
+      cryptoService.lock();
+
       await firebaseAuthService.signOut();
       return true;
     } catch (e) {
@@ -91,14 +100,12 @@ class AuthRepoImpl implements AuthRepo {
   @override
   AsyncSwardenResult<UserModel?> getCurrentUser() async {
     try {
-      // Verificar si hay un usuario autenticado en Firebase
       final currentFirebaseUser = firebaseAuthService.currentUser;
 
       if (currentFirebaseUser == null) {
         return Either.left(SwardenException.noCredentials());
       }
 
-      // Cargar los datos del usuario desde Firestore
       final user = await firestoreService.loadUser(currentFirebaseUser.uid);
 
       if (user == null) {
@@ -119,6 +126,9 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final uid = firebaseAuthService.currentUser?.uid;
       if (uid == null) return false;
+
+      cryptoService.lock();
+
       final authDeleted = await firebaseAuthService.deleteUserAccount();
       if (!authDeleted) return false;
       final firestoreDeleted = await firestoreService.deleteUser(uid);

@@ -6,5 +6,4 @@ class Crypto {
   static const int argon2Parallelism = 1; // 1 fil per simplicitat
   static const int keyLength = 32; // 256 bits (KEK i DEK)
   static const int nonceLength = 12; // GCM recomanat: 12 bytes
-  static const int version = 1; //Versió del protocol
 }
