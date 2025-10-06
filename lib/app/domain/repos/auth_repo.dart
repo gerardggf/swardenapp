@@ -17,7 +17,11 @@ final authRepoProvider = Provider<AuthRepo>(
 abstract class AuthRepo {
   AsyncSwardenResult<UserModel?> signIn(String email, String password);
   Future<bool> signOut();
-  AsyncSwardenResult<UserModel?> register(String email, String password);
+  AsyncSwardenResult<UserModel?> register(
+    String email,
+    String password,
+    String vaultPassword,
+  );
   AsyncSwardenResult<UserModel?> getCurrentUser();
   Future<bool> deleteAccount();
 }

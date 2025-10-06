@@ -18,8 +18,9 @@ class SessionController extends StateNotifier<UserModel?> {
   Future<Either<SwardenException, UserModel?>> register(
     String email,
     String password,
+    String vaultPassword,
   ) async {
-    final user = await authRepo.register(email, password);
+    final user = await authRepo.register(email, password, vaultPassword);
 
     state = user.when(left: (_) => null, right: (r) => r);
     return user;

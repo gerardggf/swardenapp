@@ -17,13 +17,11 @@ import 'package:swardenapp/app/presentation/modules/home/widgets/entry_tile_widg
 import 'package:swardenapp/app/presentation/modules/new_entry/new_entry_view.dart';
 
 final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
-  final sessionController = ref.read(sessionControllerProvider);
-  if (sessionController == null) {
+  final userId = ref.watch(sessionControllerProvider)?.uid;
+  if (userId == null) {
     return [];
   }
-  return ref.read(entriesRepoProvider).getEntries(sessionController.uid).then((
-    value,
-  ) {
+  return ref.read(entriesRepoProvider).getEntries(userId).then((value) {
     return value.when(left: (_) => [], right: (r) => r);
   });
 });

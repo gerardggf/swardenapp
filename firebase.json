@@ -1,1 +1,33 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"swardenapp-de2be","appId":"1:217766266293:android:01111a0ce265fe183185fc","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"swardenapp-de2be","appId":"1:217766266293:ios:9952067d993c980f3185fc","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"swardenapp-de2be","configurations":{"android":"1:217766266293:android:01111a0ce265fe183185fc","ios":"1:217766266293:ios:9952067d993c980f3185fc"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "swardenapp-de2be",
+          "appId": "1:217766266293:android:01111a0ce265fe183185fc",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "swardenapp-de2be",
+          "appId": "1:217766266293:ios:9952067d993c980f3185fc",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "swardenapp-de2be",
+          "configurations": {
+            "android": "1:217766266293:android:01111a0ce265fe183185fc",
+            "ios": "1:217766266293:ios:9952067d993c980f3185fc"
+          }
+        }
+      }
+    }
+  }
+}

@@ -20,7 +20,11 @@ class AuthRepoImpl implements AuthRepo {
   });
 
   @override
-  AsyncSwardenResult<UserModel?> register(String email, String password) async {
+  AsyncSwardenResult<UserModel?> register(
+    String email,
+    String password,
+    String vaultPassword,
+  ) async {
     try {
       final credentialEither = await firebaseAuthService
           .registerWithEmailAndPassword(email: email, password: password);
@@ -28,7 +32,8 @@ class AuthRepoImpl implements AuthRepo {
       return credentialEither.when(
         left: (exception) => Either.left(exception),
         right: (cred) async {
-          final vaultData = cryptoService.createUserVault(password);
+          // Usar la contrasenya de la bòvada per la cryptografia
+          final vaultData = cryptoService.createUserVault(vaultPassword);
           final user = UserModel(
             uid: cred.user!.uid,
             email: cred.user!.email ?? email,
@@ -36,6 +41,16 @@ class AuthRepoImpl implements AuthRepo {
             dekBox: vaultData.$2,
           );
           await firestoreService.createUser(user: user);
+
+          // Desbloquejar automàticament la bòveda amb la contrasenya de la bòvada
+          final unlockSuccess = cryptoService.unlock(vaultPassword, user);
+          if (!unlockSuccess) {
+            if (kDebugMode) {
+              print(
+                'Warning: No s\'ha pogut desbloquejar la bòvada automàticament després del registre',
+              );
+            }
+          }
 
           return Either.right(user);
         },
@@ -62,14 +77,8 @@ class AuthRepoImpl implements AuthRepo {
             return Either.left(SwardenException.userNotFound());
           }
 
-          final unlockSuccess = cryptoService.unlock(password, user);
-          if (!unlockSuccess) {
-            if (kDebugMode) {
-              print(
-                'Warning: No s\'ha pogut desbloquejar la bòveda automàticament',
-              );
-            }
-          }
+          // No desbloquejar automàticament la bòvada - l'usuari ho farà manualment
+          // amb la contrasenya de la bòvada a la pantalla unlock-vault
 
           return Either.right(user);
         },

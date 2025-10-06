@@ -26,12 +26,16 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _vaultPasswordController = TextEditingController();
+  final _confirmVaultPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
   bool _acceptsPrivacyPolicy = false;
   bool _obscurePswrd = true;
   bool _obscureConfirmPswrd = true;
+  bool _obscureVaultPswrd = true;
+  bool _obscureConfirmVaultPswrd = true;
 
   @override
   Widget build(BuildContext context) {
@@ -228,10 +232,141 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                     ),
                     24.h,
+
+                    // Separador visual
+                    Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Contrasenya de la Bòvada',
+                            style: context.bodyThemeM?.copyWith(
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                    16.h,
+                    WarningWidget(
+                      color: const Color.fromARGB(255, 18, 132, 147),
+                      bgColor: Colors.blue.shade50,
+                      content:
+                          'Aquesta contrasenya protegeix les teves dades i mai es guardarà als nostres servidors. Zero-knowledge garantit!',
+                      icon: Icons.shield,
+                    ),
+
+                    20.h,
+
+                    // Camp contrasenya de la bòvada
+                    TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
+                      controller: _vaultPasswordController,
+                      decoration: InputDecoration(
+                        hintText: 'Contrasenya de la Bòvada',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.security_outlined,
+                          color: AppColors.primary,
+                        ),
+                        suffixIcon: InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            setState(() {
+                              _obscureVaultPswrd = !_obscureVaultPswrd;
+                            });
+                          },
+                          child: Icon(
+                            _obscureVaultPswrd
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade50,
+                        helperText:
+                            'Aquesta contrasenya desxifra les teves dades',
+                        helperStyle: TextStyle(color: Colors.grey.shade600),
+                      ),
+                      obscureText: _obscureVaultPswrd,
+                      validator: (value) => Validators.validatePassword(value),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    20.h,
+
+                    TextFormField(
+                      onTapOutside: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
+                      controller: _confirmVaultPasswordController,
+                      decoration: InputDecoration(
+                        hintText: 'Confirmar Contrasenya de la Bòvada',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        suffixIcon: InkWell(
+                          borderRadius: BorderRadius.circular(30),
+                          onTap: () {
+                            setState(() {
+                              _obscureConfirmVaultPswrd =
+                                  !_obscureConfirmVaultPswrd;
+                            });
+                          },
+                          child: Icon(
+                            _obscureConfirmVaultPswrd
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.security_outlined,
+                          color: AppColors.primary,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade50,
+                      ),
+                      obscureText: _obscureConfirmVaultPswrd,
+                      validator: (value) => Validators.validateConfirmPassword(
+                        value,
+                        _vaultPasswordController.text,
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    24.h,
+
                     WarningWidget(
                       title: 'IMPORTANT',
                       content:
-                          'La contrasenya no es podrà canviar després del registre. Assegura\'t que la recordis!',
+                          'Les contrasenyes no es podran canviar després del registre. Assegura\'t que les recordis!',
                       icon: Icons.warning_amber,
                     ),
                     20.h,
@@ -379,10 +514,11 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    final vaultPassword = _vaultPasswordController.text.trim();
 
     final result = await ref
         .read(sessionControllerProvider.notifier)
-        .register(email, password);
+        .register(email, password, vaultPassword);
 
     result.when(
       left: (e) {
@@ -405,6 +541,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _vaultPasswordController.dispose();
+    _confirmVaultPasswordController.dispose();
     super.dispose();
   }
 }

@@ -52,10 +52,18 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
       if (success) {
         context.goNamed(SplashView.routeName);
       } else {
-        SwardenDialogs.snackBar(context, texts.auth.wrongPassword);
+        SwardenDialogs.snackBar(
+          context,
+          texts.auth.wrongPassword,
+          isError: true,
+        );
       }
     } catch (e) {
-      SwardenDialogs.snackBar(context, '${texts.auth.anErrorHasOccurred}: $e');
+      SwardenDialogs.snackBar(
+        context,
+        '${texts.auth.anErrorHasOccurred}: $e',
+        isError: true,
+      );
     }
 
     if (mounted) {
