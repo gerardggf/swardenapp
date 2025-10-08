@@ -123,7 +123,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                   ],
                 ),
               ),
-              // Contingut
+
               Expanded(child: _buildBody()),
             ],
           ),

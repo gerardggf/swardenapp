@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
@@ -36,7 +37,13 @@ class HomeView extends ConsumerWidget {
     final entriesFuture = ref.watch(entriesFutureProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(Global.appName),
+        title: Row(
+          children: [
+            Image.asset(Assets.icon, width: 30, height: 30),
+            8.w,
+            const Text(Global.appName),
+          ],
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -66,13 +73,25 @@ class HomeView extends ConsumerWidget {
               ),
               PopupMenuItem(
                 onTap: () async {
-                  final confirm = SwardenDialogs.dialog(
-                    context: context,
-                    title: texts.auth.logout,
-                    content: Text('Vols tancar sessió?'),
-                  );
-                  if (!await confirm) return;
-                  await ref.read(sessionControllerProvider.notifier).signOut();
+                  try {
+                    final confirm = SwardenDialogs.dialog(
+                      context: context,
+                      title: texts.auth.logout,
+                      content: Text('Vols tancar sessió?'),
+                    );
+                    if (!await confirm) return;
+                    await ref
+                        .read(sessionControllerProvider.notifier)
+                        .signOut();
+                  } catch (e) {
+                    if (context.mounted) {
+                      SwardenDialogs.snackBar(
+                        context,
+                        texts.auth.anErrorHasOccurred,
+                        isError: true,
+                      );
+                    }
+                  }
                 },
                 child: Row(
                   children: [
@@ -110,7 +129,8 @@ class HomeView extends ConsumerWidget {
         onRefresh: () => ref.refresh(entriesFutureProvider.future),
         child: entriesFuture.when(
           data: (entries) {
-            return ListView.builder(
+            return ListView.separated(
+              separatorBuilder: (_, __) => 10.h,
               itemCount: entries.length,
               itemBuilder: (context, index) {
                 final entry = entries[index];

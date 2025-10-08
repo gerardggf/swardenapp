@@ -50,6 +50,7 @@ class SwardenApp extends ConsumerWidget {
       locale: TranslationProvider.of(context).flutterLocale,
       // Configuració de les rutes
       routerConfig: ref.watch(goRouterProvider),
+      // Tema de l'aplicació
       theme: SwardenTheme.theme,
     );
   }

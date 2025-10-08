@@ -3,13 +3,13 @@ import 'package:swardenapp/app/core/typedefs.dart';
 import 'package:swardenapp/app/data/repo_impl/auth_repo_impl.dart';
 import 'package:swardenapp/app/data/services/crypto_service.dart';
 import 'package:swardenapp/app/data/services/firebase_auth_service.dart';
-import 'package:swardenapp/app/data/services/firebase_firestore_service.dart';
+import 'package:swardenapp/app/data/services/firestore_user_service.dart';
 import 'package:swardenapp/app/domain/models/user_model.dart';
 
 final authRepoProvider = Provider<AuthRepo>(
   (ref) => AuthRepoImpl(
     firebaseAuthService: ref.watch(firebaseAuthServiceProvider),
-    firestoreService: ref.watch(firebaseFirestoreServiceProvider),
+    firestoreService: ref.watch(firestoreUserServiceProvider),
     cryptoService: ref.watch(cryptoServiceProvider),
   ),
 );

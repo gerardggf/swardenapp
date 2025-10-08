@@ -1,15 +1,14 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:swardenapp/app/core/exceptions/locked_exception.dart';
 
-/// Model per guardar a la RAM la sessió de la bóveda amb la DEK en memòria
-class SessionModel {
-  /// Clau d'encriptació de les dades
+/// Model per guardar a la memòria RAM la DEK desxifrada i l'estat de bloqueig
+class VaultSession {
   final Key _dek;
   bool _isLocked;
 
-  SessionModel._(this._dek) : _isLocked = false;
+  VaultSession._(this._dek) : _isLocked = false;
 
-  factory SessionModel.create(Key dek) => SessionModel._(dek);
+  factory VaultSession.create(Key dek) => VaultSession._(dek);
 
   Key get dek {
     if (_isLocked) throw const LockedException();

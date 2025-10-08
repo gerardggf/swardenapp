@@ -1,3 +1,4 @@
+/// Excepció relacionada amb operacions criptogràfiques
 class CryptoException implements Exception {
   final String message;
   const CryptoException(this.message);

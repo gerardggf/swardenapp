@@ -8,6 +8,7 @@ final firestoreEntryServiceProvider = Provider<FirestoreEntryService>((ref) {
   return FirestoreEntryService(firestore: FirebaseFirestore.instance);
 });
 
+/// Servei per gestionar les entrades a Firestore
 class FirestoreEntryService {
   final FirebaseFirestore _firestore;
 

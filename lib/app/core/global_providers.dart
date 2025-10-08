@@ -8,10 +8,12 @@ final packageInfoProvider = FutureProvider<PackageInfo>(
   (ref) => PackageInfo.fromPlatform(),
 );
 
+/// Proveïdor per obtenir la instància de Firebase Firestore
 final firebaseFirestoreProvider = Provider<FirebaseFirestore>(
   (ref) => FirebaseFirestore.instance,
 );
 
+/// Proveïdor per obtenir la instància de Firebase Auth
 final firebaseAuthProvider = Provider<FirebaseAuth>(
   (ref) => FirebaseAuth.instance,
 );

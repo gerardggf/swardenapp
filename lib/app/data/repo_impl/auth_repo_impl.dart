@@ -5,12 +5,12 @@ import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart
 import 'package:swardenapp/app/domain/models/user_model.dart';
 import 'package:swardenapp/app/domain/repos/auth_repo.dart';
 import '../services/firebase_auth_service.dart';
-import '../services/firebase_firestore_service.dart';
+import '../services/firestore_user_service.dart';
 import '../services/crypto_service.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final FirebaseAuthService firebaseAuthService;
-  final FirebaseFirestoreService firestoreService;
+  final FirestoreUserService firestoreService;
   final CryptoService cryptoService;
 
   AuthRepoImpl({
@@ -26,13 +26,14 @@ class AuthRepoImpl implements AuthRepo {
     String vaultPassword,
   ) async {
     try {
+      // Registre a Firebase Auth
       final credentialEither = await firebaseAuthService
           .registerWithEmailAndPassword(email: email, password: password);
 
       return credentialEither.when(
         left: (exception) => Either.left(exception),
         right: (cred) async {
-          // Usar la contrasenya de la bòvada per la cryptografia
+          // Es crea la bóveda de l'usuari amb la contrasenya de la bóveda
           final vaultData = cryptoService.createUserVault(vaultPassword);
           final user = UserModel(
             uid: cred.user!.uid,
@@ -40,18 +41,20 @@ class AuthRepoImpl implements AuthRepo {
             salt: vaultData.$1,
             dekBox: vaultData.$2,
           );
+          // Es desa l'usuari a Firestore
           await firestoreService.createUser(user: user);
 
-          // Desbloquejar automàticament la bòveda amb la contrasenya de la bòvada
+          // Desbloqueja automàticament la bóveda creada amb la contrasenya de la bóveda
           final unlockSuccess = cryptoService.unlock(vaultPassword, user);
           if (!unlockSuccess) {
             if (kDebugMode) {
               print(
-                'Warning: No s\'ha pogut desbloquejar la bòvada automàticament després del registre',
+                'Warning: No s\'ha pogut desbloquejar la bóveda automàticament després del registre',
               );
             }
           }
 
+          // Retorna l'usuari creat per establir la sessió
           return Either.right(user);
         },
       );
@@ -66,19 +69,21 @@ class AuthRepoImpl implements AuthRepo {
   @override
   AsyncSwardenResult<UserModel?> signIn(String email, String password) async {
     try {
+      // Inici de sessió a Firebase Auth
       final credentialEither = await firebaseAuthService
           .signInWithEmailAndPassword(email: email, password: password);
 
       return credentialEither.when(
         left: (exception) => Either.left(exception),
         right: (cred) async {
+          // Es carrega l'usuari de Firestore
           final user = await firestoreService.loadUser(cred.user!.uid);
           if (user == null) {
             return Either.left(SwardenException.userNotFound());
           }
 
-          // No desbloquejar automàticament la bòvada - l'usuari ho farà manualment
-          // amb la contrasenya de la bòvada a la pantalla unlock-vault
+          // No es pot desbloquejar la bóveda, ja que cal la contrasenya
+          // que introduirà l'usuari a la pantalla /unlock-vault
 
           return Either.right(user);
         },
@@ -94,8 +99,10 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<bool> signOut() async {
     try {
+      // Es bloqueja la bóveda abans de tancar sessió
       cryptoService.lock();
 
+      // Tanca sessió a Firebase Auth
       await firebaseAuthService.signOut();
       return true;
     } catch (e) {
@@ -115,6 +122,7 @@ class AuthRepoImpl implements AuthRepo {
         return Either.left(SwardenException.noCredentials());
       }
 
+      // Es carrega l'usuari de Firestore
       final user = await firestoreService.loadUser(currentFirebaseUser.uid);
 
       if (user == null) {
@@ -136,10 +144,13 @@ class AuthRepoImpl implements AuthRepo {
       final uid = firebaseAuthService.currentUser?.uid;
       if (uid == null) return false;
 
+      // Es bloqueja la bóveda abans d'eliminar el compte
       cryptoService.lock();
 
+      // Esborra l'usuari de Firebase Auth
       final authDeleted = await firebaseAuthService.deleteUserAccount();
       if (!authDeleted) return false;
+      // Esborra l'usuari de Firestore si s'ha esborrat de Firebase Auth
       final firestoreDeleted = await firestoreService.deleteUser(uid);
       return firestoreDeleted;
     } catch (e) {

@@ -3,6 +3,7 @@ class UserModel {
   final String uid;
   final String email;
 
+  // Informació de xifratge
   final String salt;
   final String dekBox; // DEK xifrada amb KEK
 

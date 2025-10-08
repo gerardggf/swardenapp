@@ -9,18 +9,15 @@ import 'package:swardenapp/app/core/constants/crypto.dart';
 import 'package:swardenapp/app/core/exceptions/crypto_exception.dart';
 import 'package:swardenapp/app/core/exceptions/locked_exception.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
-import 'package:swardenapp/app/domain/models/session_model.dart';
+import 'package:swardenapp/app/presentation/controllers/vault_session.dart';
 import 'package:swardenapp/app/domain/models/user_model.dart';
 
 final cryptoServiceProvider = Provider<CryptoService>((ref) => CryptoService());
 
 class CryptoService {
-  SessionModel? _vaultSession;
+  VaultSession? _vaultSession;
 
-  /// Retorna true si la boveda està desblocada
-  bool get isVaultUnlocked => _vaultSession != null;
-
-  /// Genera un ID únic al crear una nova entrada
+  /// Genera un ID únic de document al crear una nova entrada
   String generateId() {
     final random = Random.secure();
     const chars =
@@ -31,7 +28,7 @@ class CryptoService {
     ).join();
   }
 
-  /// Genera un salt únic per usuari (només al crear compte)
+  /// Genera un salt únic per usuari (només al crear la bóveda)
   String generateUserSalt() {
     final random = Random.secure();
     final bytes = Uint8List(32);
@@ -41,7 +38,7 @@ class CryptoService {
     return base64Encode(bytes);
   }
 
-  /// Genera un nonce (IV) únic per cada operació AEAD
+  /// Genera un nonce únic per cada entrada
   String generateNonce() {
     final random = Random.secure();
     final bytes = Uint8List(Crypto.nonceLength);
@@ -86,7 +83,7 @@ class CryptoService {
     }
   }
 
-  /// REGISTRE: Crea una nova bóveda d'usuari
+  /// Crea una nova bóveda d'usuari. Retorna el salt i el dekBox
   (String, String) createUserVault(String password) {
     try {
       if (password.isEmpty) {
@@ -112,7 +109,7 @@ class CryptoService {
     }
   }
 
-  /// INICI DE SESSIÓ: Desbloqueja les entrades amb la contrasenya
+  /// Desbloqueja les entrades amb la contrasenya de la bòveda
   bool unlock(String password, UserModel user) {
     try {
       if (password.isEmpty) {
@@ -128,7 +125,7 @@ class CryptoService {
       final dek = Key(dekBytes);
 
       // 3. Crea sessió de bóveda amb la DEK en memòria
-      _vaultSession = SessionModel.create(dek);
+      _vaultSession = VaultSession.create(dek);
 
       return true;
     } catch (e) {
@@ -138,7 +135,7 @@ class CryptoService {
   }
 
   /// Comprova si la bóveda està desblocada
-  bool get isUnlocked => _vaultSession != null && !_vaultSession!.isLocked;
+  bool get isVaultUnlocked => _vaultSession != null && !_vaultSession!.isLocked;
 
   /// Bloqueja la bóveda (esborra la DEK de la memòria)
   void lock() {
@@ -148,7 +145,7 @@ class CryptoService {
 
   /// Xifra EntryDataModel i retorna EntryModel
   EntryModel encryptEntryData(EntryDataModel entryData, String entryId) {
-    if (!isUnlocked) {
+    if (!isVaultUnlocked) {
       throw const LockedException();
     }
 
@@ -168,7 +165,7 @@ class CryptoService {
 
   /// Desxifra EntryModel i retorna  EntryDataModel
   EntryDataModel decryptEntryData(EntryModel entryModel) {
-    if (!isUnlocked) {
+    if (!isVaultUnlocked) {
       throw const LockedException();
     }
 
@@ -186,7 +183,7 @@ class CryptoService {
     }
   }
 
-  // Mètodes auxiliars per conversió de dades
+  /// Converteix JSON a string
   String _entryDataToJson(Map<String, dynamic> data) {
     final buffer = StringBuffer();
     buffer.write('title=${data['title'] ?? ''}\n');
@@ -198,6 +195,7 @@ class CryptoService {
     return buffer.toString();
   }
 
+  /// Converteix string a JSON
   Map<String, dynamic> _entryDataFromJson(String plaintext) {
     final lines = plaintext.split('\n');
     final data = <String, dynamic>{};
@@ -215,20 +213,14 @@ class CryptoService {
   }
 
   /// Operació AEAD interna: xifra amb AES-GCM
-  String _encryptAEAD(String plaintext, Key key, String nonce, [String? aad]) {
+  String _encryptAEAD(String plaintext, Key key, String nonce) {
     try {
       final nonceBytes = base64Decode(nonce);
       final iv = IV(nonceBytes);
 
       final encrypter = Encrypter(AES(key, mode: AESMode.gcm));
 
-      final encrypted = aad != null
-          ? encrypter.encrypt(
-              plaintext,
-              iv: iv,
-              associatedData: utf8.encode(aad),
-            )
-          : encrypter.encrypt(plaintext, iv: iv);
+      final encrypted = encrypter.encrypt(plaintext, iv: iv);
 
       // Retorna: nonce||ciphertext||tag en Base64
       final combined = Uint8List.fromList([...nonceBytes, ...encrypted.bytes]);
@@ -240,7 +232,7 @@ class CryptoService {
   }
 
   /// Operació AEAD interna: desxifra amb AES-GCM
-  String _decryptAEAD(String encryptedData, Key key, [String? aad]) {
+  String _decryptAEAD(String encryptedData, Key key) {
     try {
       final combined = base64Decode(encryptedData);
 
@@ -253,13 +245,7 @@ class CryptoService {
 
       final encrypter = Encrypter(AES(key, mode: AESMode.gcm));
 
-      return aad != null
-          ? encrypter.decrypt(
-              encrypted,
-              iv: iv,
-              associatedData: utf8.encode(aad),
-            )
-          : encrypter.decrypt(encrypted, iv: iv);
+      return encrypter.decrypt(encrypted, iv: iv);
     } catch (e) {
       throw CryptoException('Error en AEAD decrypt: $e');
     }

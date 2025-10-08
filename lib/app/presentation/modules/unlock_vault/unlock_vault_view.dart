@@ -73,8 +73,13 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
   Future<void> _signOut() async {
     try {
-      final sessionController = ref.read(sessionControllerProvider.notifier);
-      await sessionController.signOut();
+      final confirm = SwardenDialogs.dialog(
+        context: context,
+        title: texts.auth.logout,
+        content: Text('Vols tancar sessió?'),
+      );
+      if (!await confirm) return;
+      await ref.read(sessionControllerProvider.notifier).signOut();
 
       if (!mounted) return;
       context.goNamed(SplashView.routeName);
@@ -141,7 +146,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                     16.h,
 
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16).copyWith(right: 5),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -180,6 +185,13 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: _signOut,
+                            icon: Icon(
+                              Icons.logout_outlined,
+                              color: Colors.red,
                             ),
                           ),
                         ],
@@ -321,19 +333,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                       color: const Color.fromARGB(255, 28, 120, 195),
                       bgColor: Colors.blue.shade50,
                     ),
-                    10.h,
 
-                    TextButton.icon(
-                      onPressed: _signOut,
-                      icon: Icon(Icons.logout_outlined, color: Colors.red),
-                      label: Text(
-                        'Tancar Sessió',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                     30.h,
                   ],
                 ),

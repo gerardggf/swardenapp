@@ -64,8 +64,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     40.h,
-
-                    // Logo i títol principal
                     Column(
                       children: [
                         Container(
@@ -96,7 +94,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     40.h,
 
-                    // Camp email
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -132,7 +129,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     20.h,
 
-                    // Camp contrasenya
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -182,7 +178,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     20.h,
 
-                    // Camp confirmar contrasenya
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -233,14 +228,13 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     24.h,
 
-                    // Separador visual
                     Row(
                       children: [
                         Expanded(child: Divider()),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'Contrasenya de la Bòvada',
+                            'Contrasenya de la bóveda',
                             style: context.bodyThemeM?.copyWith(
                               color: Colors.grey.shade600,
                               fontWeight: FontWeight.w500,
@@ -261,13 +255,12 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
                     20.h,
 
-                    // Camp contrasenya de la bòvada
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _vaultPasswordController,
                       decoration: InputDecoration(
-                        hintText: 'Contrasenya de la Bòvada',
+                        hintText: 'Contrasenya de la bóveda',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -317,7 +310,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                           FocusManager.instance.primaryFocus?.unfocus(),
                       controller: _confirmVaultPasswordController,
                       decoration: InputDecoration(
-                        hintText: 'Confirmar Contrasenya de la Bòvada',
+                        hintText: 'Confirmar Contrasenya de la bóveda',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -371,7 +364,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     20.h,
 
-                    // Checkbox política de privacitat
                     Row(
                       children: [
                         Checkbox(
@@ -420,7 +412,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                     ),
                     24.h,
 
-                    // Botó de registre
                     Container(
                       width: double.infinity,
                       height: 56,
@@ -494,7 +485,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   }
 
   Future<void> _register() async {
-    /// Validem el formulari
+    /// Validació del formulari
     if (!_formKey.currentState!.validate()) {
       return;
     }

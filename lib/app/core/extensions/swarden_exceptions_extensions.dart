@@ -3,6 +3,7 @@ import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart
 import '../generated/translations.g.dart';
 
 extension StringSwardenExceptionsExtension on String {
+  /// Converteix codis d'error de Firebase a excepcions Swarden
   SwardenException fromFirebaseError() {
     final Map<String, SwardenException> errors = {
       "email-already-in-use": const SwardenException.emailAlreadyExists(),
@@ -28,6 +29,7 @@ extension StringSwardenExceptionsExtension on String {
 }
 
 extension SwardenExceptionsExtension on SwardenException {
+  /// Converteix excepcions Swarden a textos d'error traduïts
   String toText() {
     if (this is Undefined) {
       return texts.auth.anErrorHasOccurred;

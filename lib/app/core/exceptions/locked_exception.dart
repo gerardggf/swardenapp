@@ -1,3 +1,4 @@
+/// Excepció que indica que la bóveda està bloquejada
 class LockedException implements Exception {
   final String message;
   const LockedException([

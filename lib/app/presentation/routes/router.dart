@@ -15,7 +15,7 @@ import 'package:swardenapp/app/presentation/modules/unlock_vault/unlock_vault_vi
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import '../../domain/models/user_model.dart';
 
-/// Escolta canvis en Firebase Auth
+/// Escolta canvis de Firebase Auth
 final firebaseAuthStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
@@ -66,18 +66,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         error: (_, __) => currentPath == '/login' ? null : '/login',
 
         /// Sempre que doni error, redirigim a login
-        //error: (error, stack) =>
         data: (user) {
           if (user != null) {
             // Usuari autenticat amb dades
             if (currentPath == '/splash' ||
                 currentPath == '/login' ||
                 currentPath == '/register') {
-              // Redirigir a unlock-vault si la boveda està blocada
+              // Redirigir a unlock-vault si la boveda està bloquejada
               return cryptoService.isVaultUnlocked ? '/home' : '/unlock-vault';
             }
 
-            // Verificar si s'intenta accedir a pàgines que requereixen bóveda desblocada
+            // Verificar si s'intenta accedir a pàgines que requereixen tenir la bóveda desbloquejada
             if (!cryptoService.isVaultUnlocked &&
                 (currentPath == '/home' ||
                     currentPath == '/new-entry' ||
@@ -85,7 +84,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               return '/unlock-vault';
             }
           } else {
-            // Sense usuari
+            // Usuari no loggejat
             if (currentPath != '/login' && currentPath != '/register') {
               return '/login';
             }

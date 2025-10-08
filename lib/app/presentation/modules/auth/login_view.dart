@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
@@ -46,21 +47,19 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    50.h,
-
-                    // Logo i títol principal
+                    30.h,
                     Column(
                       children: [
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withAlpha(24),
+                            color: Colors.white,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
-                            Icons.lock_outline,
-                            size: 60,
-                            color: AppColors.primary,
+                          child: Image.asset(
+                            Assets.icon,
+                            height: 100,
+                            width: 100,
                           ),
                         ),
                         24.h,
@@ -83,7 +82,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                     48.h,
 
-                    // Camp email
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -126,7 +124,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                     20.h,
 
-                    // Camp contrasenya
                     TextFormField(
                       onTapOutside: (_) =>
                           FocusManager.instance.primaryFocus?.unfocus(),
@@ -167,7 +164,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                     32.h,
 
-                    // Botó d'inici de sessió
                     Container(
                       width: double.infinity,
                       height: 56,
@@ -219,7 +215,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     ),
                     24.h,
 
-                    // Enllaç per registrar-se
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

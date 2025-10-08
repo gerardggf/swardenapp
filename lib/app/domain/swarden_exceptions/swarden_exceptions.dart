@@ -4,7 +4,6 @@ part 'swarden_exceptions.freezed.dart';
 
 @freezed
 class SwardenException with _$SwardenException {
-  // Casos estándar de errores
   const factory SwardenException.emailAlreadyExists() = EmailAlreadyExists;
   const factory SwardenException.insufficientPermission() =
       InsufficientPermission;

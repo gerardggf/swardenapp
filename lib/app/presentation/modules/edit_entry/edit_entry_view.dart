@@ -126,7 +126,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Header
                     Row(
                       children: [
                         SwardenBackButton(),
@@ -146,7 +145,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                     32.h,
 
-                    // Card principal amb els camps d'entrada
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -190,7 +188,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                           24.h,
 
-                          // Camp del títol
                           TextFormField(
                             controller: _titleController,
                             decoration: InputDecoration(
@@ -214,7 +211,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                           20.h,
 
-                          // Camp del nom d'usuari
                           TextFormField(
                             controller: _usernameController,
                             decoration: InputDecoration(
@@ -239,7 +235,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                           20.h,
 
-                          // Camp de la contrasenya
                           TextFormField(
                             controller: _passwordController,
                             decoration: InputDecoration(
@@ -280,7 +275,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                     32.h,
 
-                    // Botó d'actualitzar
                     Container(
                       height: 56,
                       decoration: BoxDecoration(
@@ -342,7 +336,6 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
 
                     24.h,
 
-                    // Nota informativa
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(

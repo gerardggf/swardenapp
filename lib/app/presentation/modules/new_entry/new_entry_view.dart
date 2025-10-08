@@ -101,7 +101,6 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Header
                     Row(
                       children: [
                         SwardenBackButton(),
@@ -121,7 +120,6 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
 
                     32.h,
 
-                    // Títol de la secció
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -205,7 +203,6 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
 
                     24.h,
 
-                    // Credencials
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -335,7 +332,6 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
 
                     32.h,
 
-                    // Botó principal
                     SizedBox(
                       height: 56,
                       child: ElevatedButton.icon(
@@ -375,7 +371,6 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
 
                     24.h,
 
-                    // Informació de seguretat
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(

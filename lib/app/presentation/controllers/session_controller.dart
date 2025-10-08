@@ -14,7 +14,6 @@ class SessionController extends StateNotifier<UserModel?> {
 
   SessionController(super.state, this.authRepo);
 
-  /// Registro de nuevo usuario (login activo)
   Future<Either<SwardenException, UserModel?>> register(
     String email,
     String password,
@@ -26,7 +25,6 @@ class SessionController extends StateNotifier<UserModel?> {
     return user;
   }
 
-  /// Login con credenciales (login activo)
   Future<Either<SwardenException, UserModel?>> signIn(
     String email,
     String password,
@@ -37,7 +35,6 @@ class SessionController extends StateNotifier<UserModel?> {
     return user;
   }
 
-  /// Recuperar usuario existente de sesión persistente (sin credenciales)
   Future<Either<SwardenException, UserModel?>> restoreSession() async {
     final userResult = await authRepo.getCurrentUser();
 
@@ -53,18 +50,15 @@ class SessionController extends StateNotifier<UserModel?> {
     );
   }
 
-  /// Método auxiliar para actualizar el estado sin lógica de autenticación
   void setUser(UserModel? user) {
     state = user;
   }
 
-  /// Tancar sessió
   Future<void> signOut() async {
     await authRepo.signOut();
     state = null;
   }
 
-  /// Borrar compte
   Future<void> deleteAccount() async {
     await authRepo.deleteAccount();
     state = null;
