@@ -44,7 +44,7 @@ class EntryTileWidget extends StatelessWidget {
                 Icon(Icons.storage, size: 14, color: Colors.grey[600]),
                 const SizedBox(width: 4),
                 Text(
-                  'Dades xifrades',
+                  entry.createdAt.toIso8601String().split('T').first,
                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
                 ),
               ],

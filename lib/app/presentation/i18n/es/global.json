@@ -3,5 +3,6 @@
     "confirm": "Confirmar",
     "anErrorHasOccurred": "Se ha producido un error",
     "createdOn": "Creado el",
-    "lastModified": "Modificado el"
+    "lastModified": "Modificado el",
+    "swipeToRefresh": "Desliza hacia abajo para actualizar las entradas"
 }

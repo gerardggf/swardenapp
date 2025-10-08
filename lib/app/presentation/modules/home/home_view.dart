@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/assets.dart';
+import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
@@ -125,52 +126,103 @@ class HomeView extends ConsumerWidget {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(entriesFutureProvider.future),
-        child: entriesFuture.when(
-          data: (entries) {
-            return ListView.separated(
-              separatorBuilder: (_, __) => 10.h,
-              itemCount: entries.length,
-              itemBuilder: (context, index) {
-                final entry = entries[index];
-                return EntryTileWidget(
-                  entry: entry,
-                  onTap: () {
-                    context.pushNamed(EntryView.routeName, extra: entry);
-                  },
-                  onEdit: () {
-                    context.pushNamed(EditEntryView.routeName, extra: entry);
-                  },
-                  onDelete: () async {
-                    final result = await ref
-                        .read(entriesRepoProvider)
-                        .deleteEntry(
-                          ref.read(sessionControllerProvider)!.uid,
-                          entry.id!,
-                        );
-                    if (!context.mounted) return;
-                    if (result) {
-                      SwardenDialogs.snackBar(
-                        context,
-                        'La entrada s\'ha eliminat correctament',
+      body: Stack(
+        children: [
+          Image.asset(
+            Assets.bg,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Container(
+            color: Colors.white.withAlpha(230),
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          RefreshIndicator(
+            color: AppColors.primary,
+            backgroundColor: Colors.white,
+            onRefresh: () => ref.refresh(entriesFutureProvider.future),
+            child: entriesFuture.when(
+              data: (entries) {
+                return ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: AppColors.primary,
+                            size: 18,
+                          ),
+                          5.w,
+                          Text(
+                            texts.global.swipeToRefresh,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ...List.generate(entries.length, (index) {
+                      final entry = entries[index];
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: index == entries.length - 1 ? 0 : 10,
+                        ),
+                        child: EntryTileWidget(
+                          entry: entry,
+                          onTap: () {
+                            context.pushNamed(
+                              EntryView.routeName,
+                              extra: entry,
+                            );
+                          },
+                          onEdit: () {
+                            context.pushNamed(
+                              EditEntryView.routeName,
+                              extra: entry,
+                            );
+                          },
+                          onDelete: () async {
+                            final result = await ref
+                                .read(entriesRepoProvider)
+                                .deleteEntry(
+                                  ref.read(sessionControllerProvider)!.uid,
+                                  entry.id!,
+                                );
+                            if (!context.mounted) return;
+                            if (result) {
+                              SwardenDialogs.snackBar(
+                                context,
+                                'La entrada s\'ha eliminat correctament',
+                              );
+                              ref.invalidate(entriesFutureProvider);
+                            } else {
+                              SwardenDialogs.snackBar(
+                                context,
+                                'Error eliminant la entrada',
+                                isError: true,
+                              );
+                            }
+                          },
+                        ),
                       );
-                      ref.invalidate(entriesFutureProvider);
-                    } else {
-                      SwardenDialogs.snackBar(
-                        context,
-                        texts.auth.anErrorHasOccurred,
-                        isError: true,
-                      );
-                    }
-                  },
+                    }),
+                  ],
                 );
               },
-            );
-          },
-          error: (e, _) => ErrorInfoWidget(text: e.toString()),
-          loading: () => LoadingWidget(),
-        ),
+              error: (e, _) => ErrorInfoWidget(text: e.toString()),
+              loading: () => LoadingWidget(),
+            ),
+          ),
+        ],
       ),
     );
   }

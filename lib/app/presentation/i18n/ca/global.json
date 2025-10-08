@@ -3,5 +3,6 @@
     "confirm": "Confirmar",
     "anErrorHasOccurred": "S'ha produït un error",
     "createdOn": "Creat el",
-    "lastModified": "Modificat el"
+    "lastModified": "Modificat el",
+    "swipeToRefresh": "Llisca cap avall per actualitzar les entrades"
 }
