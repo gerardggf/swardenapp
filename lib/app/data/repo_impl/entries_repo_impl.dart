@@ -94,4 +94,16 @@ class EntriesRepoImpl implements EntriesRepo {
       return false;
     }
   }
+
+  @override
+  bool unlockVault(String vaultPassword, String userSalt, String dekBox) {
+    try {
+      return cryptoService.unlock(vaultPassword, userSalt, dekBox);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 }

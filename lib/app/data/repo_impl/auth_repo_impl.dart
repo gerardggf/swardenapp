@@ -44,16 +44,6 @@ class AuthRepoImpl implements AuthRepo {
           // Es desa l'usuari a Firestore
           await firestoreService.createUser(user: user);
 
-          // Desbloqueja automàticament la bóveda creada amb la contrasenya de la bóveda
-          final unlockSuccess = cryptoService.unlock(vaultPassword, user);
-          if (!unlockSuccess) {
-            if (kDebugMode) {
-              print(
-                'Warning: No s\'ha pogut desbloquejar la bóveda automàticament després del registre',
-              );
-            }
-          }
-
           // Retorna l'usuari creat per establir la sessió
           return Either.right(user);
         },
@@ -81,10 +71,6 @@ class AuthRepoImpl implements AuthRepo {
           if (user == null) {
             return Either.left(SwardenException.userNotFound());
           }
-
-          // No es pot desbloquejar la bóveda, ja que cal la contrasenya
-          // que introduirà l'usuari a la pantalla /unlock-vault
-
           return Either.right(user);
         },
       );

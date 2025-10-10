@@ -77,7 +77,7 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
               Expanded(
                 child: Text(
                   widget.title,
-                  style: context.textTheme.titleSmall?.copyWith(
+                  style: context.themeTS?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.grey.shade700,
                   ),

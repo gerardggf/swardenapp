@@ -8,7 +8,9 @@ import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/domain/either/either.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
-import 'package:swardenapp/app/domain/repos/entries_repo.dart';
+import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
+import 'package:swardenapp/app/domain/use_cases/entries/get_user_entries_use_case.dart';
+import 'package:swardenapp/app/domain/use_cases/entries/delete_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
@@ -23,9 +25,13 @@ final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
   if (userId == null) {
     return [];
   }
-  return ref.read(entriesRepoProvider).getEntries(userId).then((value) {
-    return value.when(left: (_) => [], right: (r) => r);
-  });
+
+  final getUserEntriesUseCase = ref.read(getUserEntriesUseCaseProvider);
+  final result = await getUserEntriesUseCase(
+    GetUserEntriesParams(userId: userId),
+  );
+
+  return result.when(left: (_) => [], right: (r) => r);
 });
 
 class HomeView extends ConsumerWidget {
@@ -191,26 +197,43 @@ class HomeView extends ConsumerWidget {
                             );
                           },
                           onDelete: () async {
-                            final result = await ref
-                                .read(entriesRepoProvider)
-                                .deleteEntry(
-                                  ref.read(sessionControllerProvider)!.uid,
-                                  entry.id!,
-                                );
+                            final deleteEntryUseCase = ref.read(
+                              deleteEntryUseCaseProvider,
+                            );
+                            final result = await deleteEntryUseCase(
+                              DeleteEntryParams(
+                                userId: ref
+                                    .read(sessionControllerProvider)!
+                                    .uid,
+                                entryId: entry.id!,
+                              ),
+                            );
                             if (!context.mounted) return;
-                            if (result) {
-                              SwardenDialogs.snackBar(
-                                context,
-                                'La entrada s\'ha eliminat correctament',
-                              );
-                              ref.invalidate(entriesFutureProvider);
-                            } else {
-                              SwardenDialogs.snackBar(
-                                context,
-                                'Error eliminant la entrada',
-                                isError: true,
-                              );
-                            }
+
+                            result.when(
+                              left: (error) {
+                                SwardenDialogs.snackBar(
+                                  context,
+                                  'Error eliminant la entrada',
+                                  isError: true,
+                                );
+                              },
+                              right: (success) {
+                                if (success) {
+                                  SwardenDialogs.snackBar(
+                                    context,
+                                    'La entrada s\'ha eliminat correctament',
+                                  );
+                                  ref.invalidate(entriesFutureProvider);
+                                } else {
+                                  SwardenDialogs.snackBar(
+                                    context,
+                                    'Error eliminant la entrada',
+                                    isError: true,
+                                  );
+                                }
+                              },
+                            );
                           },
                         ),
                       );

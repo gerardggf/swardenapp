@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:math';
 import 'dart:convert';
 
-import 'package:pointycastle/export.dart'; // Per Argon2id robust
+import 'package:pointycastle/export.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swardenapp/app/core/constants/crypto.dart';
@@ -10,7 +10,6 @@ import 'package:swardenapp/app/core/exceptions/crypto_exception.dart';
 import 'package:swardenapp/app/core/exceptions/locked_exception.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/presentation/controllers/vault_session.dart';
-import 'package:swardenapp/app/domain/models/user_model.dart';
 
 final cryptoServiceProvider = Provider<CryptoService>((ref) => CryptoService());
 
@@ -109,18 +108,18 @@ class CryptoService {
     }
   }
 
-  /// Desbloqueja les entrades amb la contrasenya de la bòveda
-  bool unlock(String password, UserModel user) {
+  /// Desbloqueja les entrades amb la contrasenya de la bóveda
+  bool unlock(String password, String userSalt, String dekBox) {
     try {
       if (password.isEmpty) {
         throw CryptoException('La contrasenya és requerida');
       }
 
       // 1. Deriva KEK amb la contrasenya i salt de l'usuari
-      final kek = _deriveKEK(password, user.salt);
+      final kek = _deriveKEK(password, userSalt);
 
       // 2. Desxifra la DEK
-      final dekBase64 = _decryptAEAD(user.dekBox, kek);
+      final dekBase64 = _decryptAEAD(dekBox, kek);
       final dekBytes = base64Decode(dekBase64);
       final dek = Key(dekBytes);
 

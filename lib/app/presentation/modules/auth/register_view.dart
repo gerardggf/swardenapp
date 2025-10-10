@@ -91,7 +91,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             24.h,
                             Text(
                               'Crea el teu compte',
-                              style: context.headlineThemeM?.copyWith(
+                              style: context.themeHM?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
                               ),
@@ -99,7 +99,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             8.h,
                             Text(
                               'Registra\'t per comen\u00e7ar a gestionar les teves contrasenyes de forma segura',
-                              style: context.bodyThemeM?.copyWith(
+                              style: context.themeBM?.copyWith(
                                 color: Colors.grey.shade600,
                               ),
                               textAlign: TextAlign.center,
@@ -259,7 +259,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               ),
                               child: Text(
                                 'Contrasenya de la bóveda',
-                                style: context.bodyThemeM?.copyWith(
+                                style: context.themeBM?.copyWith(
                                   color: Colors.grey.shade600,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -418,7 +418,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                   },
                                   child: RichText(
                                     text: TextSpan(
-                                      style: context.bodyThemeM,
+                                      style: context.themeBM,
                                       children: [
                                         const TextSpan(
                                           text: 'He llegit i accepto la ',

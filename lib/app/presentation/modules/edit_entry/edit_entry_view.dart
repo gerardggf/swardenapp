@@ -5,7 +5,9 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
-import 'package:swardenapp/app/domain/repos/entries_repo.dart';
+import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
+import 'package:swardenapp/app/domain/use_cases/entries/update_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
@@ -64,7 +66,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
         throw Exception('Usuari no trobat');
       }
 
-      final entriesRepo = ref.read(entriesRepoProvider);
+      final updateEntryUseCase = ref.read(updateEntryUseCaseProvider);
 
       // Crear l'entrada actualitzada mantenint l'ID i data de creació originals
       final updatedEntry = EntryDataModel(
@@ -74,25 +76,41 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
         createdAt: widget.entryData.createdAt,
       );
 
-      final result = await entriesRepo.updateEntry(
-        user.uid,
-        widget.entryData.id!,
-        updatedEntry,
+      final result = await updateEntryUseCase(
+        UpdateEntryParams(
+          userId: user.uid,
+          entryId: widget.entryData.id!,
+          entry: updatedEntry,
+        ),
       );
 
       if (!mounted) return;
 
-      if (result) {
-        SwardenDialogs.snackBar(context, 'Entrada actualitzada correctament!');
-        ref.invalidate(entriesFutureProvider);
-        context.pop();
-      } else {
-        SwardenDialogs.snackBar(
-          context,
-          'Error actualitzant entrada',
-          isError: true,
-        );
-      }
+      result.when(
+        left: (error) {
+          SwardenDialogs.snackBar(
+            context,
+            'Error actualitzant entrada: ${error.toString()}',
+            isError: true,
+          );
+        },
+        right: (success) {
+          if (success) {
+            SwardenDialogs.snackBar(
+              context,
+              'Entrada actualitzada correctament!',
+            );
+            ref.invalidate(entriesFutureProvider);
+            context.pop();
+          } else {
+            SwardenDialogs.snackBar(
+              context,
+              'Error actualitzant entrada',
+              isError: true,
+            );
+          }
+        },
+      );
     } catch (e) {
       SwardenDialogs.snackBar(
         context,
@@ -133,7 +151,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                         Expanded(
                           child: Text(
                             'Editar Entrada',
-                            style: context.textTheme.headlineMedium?.copyWith(
+                            style: context.themeHM?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
                             ),
@@ -178,7 +196,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                               12.w,
                               Text(
                                 'Informació de l\'entrada',
-                                style: context.textTheme.titleMedium?.copyWith(
+                                style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.primary,
                                 ),
@@ -323,11 +341,10 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                                   8.w,
                                   Text(
                                     'Actualitzar Entrada',
-                                    style: context.textTheme.titleMedium
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                    style: context.themeTM?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -356,7 +373,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           Expanded(
                             child: Text(
                               'Tots els camps són obligatoris. Les dades s\'encriptaran de forma segura.',
-                              style: context.textTheme.bodySmall?.copyWith(
+                              style: context.themeBS?.copyWith(
                                 color: AppColors.primary,
                               ),
                             ),

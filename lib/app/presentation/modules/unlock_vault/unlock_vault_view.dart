@@ -4,9 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
+import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
-import 'package:swardenapp/app/data/services/crypto_service.dart';
+import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/domain/use_cases/entries/unlock_vault_use_case.dart';
+import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
@@ -47,18 +50,31 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
     }
 
     try {
-      final cryptoService = ref.read(cryptoServiceProvider);
-      final success = cryptoService.unlock(_passwordController.text, user);
+      final unlockVaultUseCase = ref.read(unlockVaultUseCaseProvider);
+      final result = unlockVaultUseCase.call(
+        UnlockVaultParams(
+          vaultPassword: _passwordController.text,
+          userSalt: user.salt,
+          dekBox: user.dekBox,
+        ),
+      );
 
-      if (success) {
-        context.goNamed(SplashView.routeName);
-      } else {
-        SwardenDialogs.snackBar(
-          context,
-          texts.auth.wrongPassword,
-          isError: true,
-        );
-      }
+      result.when(
+        left: (error) {
+          SwardenDialogs.snackBar(context, error.toText(), isError: true);
+        },
+        right: (success) {
+          if (success) {
+            context.goNamed(SplashView.routeName);
+          } else {
+            SwardenDialogs.snackBar(
+              context,
+              texts.auth.wrongPassword,
+              isError: true,
+            );
+          }
+        },
+      );
     } catch (e) {
       SwardenDialogs.snackBar(
         context,
@@ -77,7 +93,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
       final confirm = SwardenDialogs.dialog(
         context: context,
         title: texts.auth.logout,
-        content: Text('Vols tancar sessió?'),
+        content: Text(texts.auth.logoutConfirmation),
       );
       if (!await confirm) return;
       await ref.read(sessionControllerProvider.notifier).signOut();
@@ -141,7 +157,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
                         Text(
                           'Bóveda Bloquejada',
-                          style: context.textTheme.headlineMedium?.copyWith(
+                          style: context.themeHM?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
@@ -151,7 +167,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
                         Text(
                           'Introdueix la teva contrasenya per desbloquejar les teves entrades',
-                          style: context.textTheme.bodyMedium?.copyWith(
+                          style: context.themeBM?.copyWith(
                             color: Colors.grey.shade600,
                           ),
                           textAlign: TextAlign.center,
@@ -189,18 +205,16 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                   children: [
                                     Text(
                                       user?.email ?? 'Usuari',
-                                      style: context.textTheme.titleMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                      style: context.themeTM?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                     4.h,
                                     Text(
                                       'Sessió activa',
-                                      style: context.textTheme.bodySmall
-                                          ?.copyWith(
-                                            color: Colors.green.shade600,
-                                          ),
+                                      style: context.themeBS?.copyWith(
+                                        color: Colors.green.shade600,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -249,8 +263,9 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                   12.w,
                                   Text(
                                     'Contrasenya Mestra',
-                                    style: context.textTheme.titleMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                    style: context.themeTM?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),

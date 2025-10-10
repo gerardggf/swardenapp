@@ -78,7 +78,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             24.h,
                             Text(
                               'Benvingut!',
-                              style: context.headlineThemeM?.copyWith(
+                              style: context.themeHM?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
                               ),
@@ -86,7 +86,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             8.h,
                             Text(
                               'Inicia sessió per accedir al teu gestor de contrasenyes',
-                              style: context.bodyThemeM?.copyWith(
+                              style: context.themeBM?.copyWith(
                                 color: Colors.grey.shade600,
                               ),
                               textAlign: TextAlign.center,
@@ -235,7 +235,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('No tens compte?', style: context.bodyThemeL),
+                            Text('No tens compte?', style: context.themeBL),
                             TextButton(
                               onPressed: () {
                                 context.pushNamed(RegisterView.routeName);
@@ -247,7 +247,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               ),
                               child: Text(
                                 'Registra\'t',
-                                style: context.bodyThemeL?.copyWith(
+                                style: context.themeBL?.copyWith(
                                   color: AppColors.primary,
 
                                   fontWeight: FontWeight.w600,

@@ -24,4 +24,7 @@ abstract class EntriesRepo {
 
   /// Elimina una entrada per ID
   Future<bool> deleteEntry(String userId, String entryId);
+
+  /// Desbloqueja la bóveda amb la contrasenya de la bóveda
+  bool unlockVault(String vaultPassword, String userSalt, String dekBox);
 }

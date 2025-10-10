@@ -5,7 +5,9 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
-import 'package:swardenapp/app/domain/repos/entries_repo.dart';
+import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
+import 'package:swardenapp/app/domain/use_cases/entries/create_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
@@ -49,25 +51,44 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
         throw Exception('Usuari no trobat');
       }
 
-      final entriesRepo = ref.read(entriesRepoProvider);
+      final createEntryUseCase = ref.read(createEntryUseCaseProvider);
 
-      final result = await entriesRepo.addEntry(
-        user.uid,
-        EntryDataModel(
-          title: _titleController.text.trim(),
-          username: _usernameController.text.trim(),
-          password: _passwordController.text,
-          createdAt: DateTime.now(),
+      final result = await createEntryUseCase(
+        CreateEntryParams(
+          userId: user.uid,
+          entry: EntryDataModel(
+            title: _titleController.text.trim(),
+            username: _usernameController.text.trim(),
+            password: _passwordController.text,
+            createdAt: DateTime.now(),
+          ),
         ),
       );
+
       if (!mounted) return;
-      if (result) {
-        SwardenDialogs.snackBar(context, 'Entrada creada correctament!');
-        ref.invalidate(entriesFutureProvider);
-        context.pop();
-      } else {
-        SwardenDialogs.snackBar(context, 'Error creant entrada', isError: true);
-      }
+
+      result.when(
+        left: (error) {
+          SwardenDialogs.snackBar(
+            context,
+            'Error creant entrada: ${error.toString()}',
+            isError: true,
+          );
+        },
+        right: (success) {
+          if (success) {
+            SwardenDialogs.snackBar(context, 'Entrada creada correctament!');
+            ref.invalidate(entriesFutureProvider);
+            context.pop();
+          } else {
+            SwardenDialogs.snackBar(
+              context,
+              'Error creant entrada',
+              isError: true,
+            );
+          }
+        },
+      );
     } catch (e) {
       SwardenDialogs.snackBar(
         context,
@@ -108,7 +129,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                         Expanded(
                           child: Text(
                             'Nova Entrada',
-                            style: context.textTheme.headlineMedium?.copyWith(
+                            style: context.themeHM?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
                             ),
@@ -153,7 +174,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                               12.w,
                               Text(
                                 'Informació General',
-                                style: context.textTheme.titleMedium?.copyWith(
+                                style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primary,
                                 ),
@@ -236,7 +257,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                               12.w,
                               Text(
                                 'Credencials d\'Accés',
-                                style: context.textTheme.titleMedium?.copyWith(
+                                style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green.shade700,
                                 ),
