@@ -41,6 +41,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(top: 10),

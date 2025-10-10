@@ -100,6 +100,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
     final user = ref.watch(sessionControllerProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Opacity(
