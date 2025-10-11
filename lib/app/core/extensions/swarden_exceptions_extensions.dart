@@ -1,4 +1,4 @@
-import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart';
+import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 
 import '../generated/translations.g.dart';
 

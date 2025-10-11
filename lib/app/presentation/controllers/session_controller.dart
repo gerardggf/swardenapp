@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
-import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
+import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/auth/sign_in_use_case.dart';
 import 'package:swardenapp/app/domain/use_cases/auth/register_user_use_case.dart';

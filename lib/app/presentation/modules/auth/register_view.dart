@@ -6,7 +6,7 @@ import 'package:swardenapp/app/core/constants/urls.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';

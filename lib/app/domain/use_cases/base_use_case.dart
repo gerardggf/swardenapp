@@ -1,5 +1,5 @@
-import 'package:swardenapp/app/domain/either/either.dart';
-import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
+import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 
 /// Interfície base per tots els casos d'ús
 abstract class UseCase<T, Params> {

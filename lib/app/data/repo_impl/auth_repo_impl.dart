@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:swardenapp/app/core/typedefs.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
-import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
+import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 import 'package:swardenapp/app/domain/models/user_model.dart';
 import 'package:swardenapp/app/domain/repos/auth_repo.dart';
 import '../services/firebase_auth_service.dart';

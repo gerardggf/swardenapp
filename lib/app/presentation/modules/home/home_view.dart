@@ -6,7 +6,7 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/get_user_entries_use_case.dart';

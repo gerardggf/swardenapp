@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/global_providers.dart';
 import 'package:swardenapp/app/core/typedefs.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
-import 'package:swardenapp/app/domain/swarden_exceptions/swarden_exceptions.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
+import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 
 final firebaseAuthServiceProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(auth: ref.watch(firebaseAuthProvider)),

@@ -5,7 +5,7 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/create_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';

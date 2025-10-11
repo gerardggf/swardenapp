@@ -7,7 +7,7 @@ import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
-import 'package:swardenapp/app/domain/either/either.dart';
+import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/unlock_vault_use_case.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
