@@ -74,7 +74,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                             extra: widget.entry,
                           );
                         },
-                        tooltip: 'Editar',
+                        tooltip: texts.entries.edit,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.white.withAlpha(230),
                           padding: const EdgeInsets.all(12),
@@ -88,9 +88,9 @@ class _EntryViewState extends ConsumerState<EntryView> {
                         onPressed: () async {
                           final confirm = await SwardenDialogs.dialog(
                             context: context,
-                            title: 'Eliminar Entrada',
+                            title: texts.entries.deleteEntry,
                             content: Text(
-                              'Estàs segur que vols eliminar aquesta entrada? Aquesta acció no es pot desfer.',
+                              texts.entries.deleteEntryConfirmation,
                             ),
                           );
                           if (!confirm) return;
@@ -111,7 +111,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                             left: (error) {
                               SwardenDialogs.snackBar(
                                 context,
-                                'Error eliminant la entrada: ${error.toString()}',
+                                '${texts.entries.errorDeletingEntry}: ${error.toString()}',
                                 isError: true,
                               );
                             },
@@ -119,7 +119,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                               if (success) {
                                 SwardenDialogs.snackBar(
                                   context,
-                                  'La entrada s\'ha eliminat correctament',
+                                  texts.entries.entryDeletedSuccessfully,
                                 );
                                 context.pop();
                                 ref.invalidate(entriesFutureProvider);
@@ -133,7 +133,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                             },
                           );
                         },
-                        tooltip: 'Eliminar',
+                        tooltip: texts.entries.delete,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.white.withAlpha(230),
                           padding: const EdgeInsets.all(12),
@@ -156,20 +156,20 @@ class _EntryViewState extends ConsumerState<EntryView> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       children: [
         InfoCardWidget(
-          title: 'Títol',
+          title: texts.entries.title,
           value: widget.entry.title,
           icon: Icons.label_outlined,
         ),
 
         InfoCardWidget(
-          title: 'Nom d\'usuari',
+          title: texts.entries.username,
           value: widget.entry.username,
           icon: Icons.person_outlined,
           iconColor: Colors.green,
         ),
 
         InfoCardWidget(
-          title: 'Contrasenya',
+          title: texts.entries.password,
           value: widget.entry.password,
           icon: Icons.lock_outlined,
           iconColor: Colors.red,
@@ -179,8 +179,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
         10.h,
         WarningWidget(
           bgColor: Colors.green.shade50,
-          content:
-              'Aquesta informació està desxifrada només en memòria i no es guarda mai en text pla.',
+          content: texts.entries.decryptedInfoWarning,
           icon: Icons.shield_outlined,
           color: const Color.fromARGB(255, 48, 136, 51),
         ),

@@ -145,7 +145,7 @@ class CryptoService {
   /// Xifra EntryDataModel i retorna EntryModel
   EntryModel encryptEntryData(EntryDataModel entryData, String entryId) {
     if (!isVaultUnlocked) {
-      throw const LockedException();
+      throw LockedException();
     }
 
     try {
@@ -165,7 +165,7 @@ class CryptoService {
   /// Desxifra EntryModel i retorna  EntryDataModel
   EntryDataModel decryptEntryData(EntryModel entryModel) {
     if (!isVaultUnlocked) {
-      throw const LockedException();
+      throw LockedException();
     }
 
     try {

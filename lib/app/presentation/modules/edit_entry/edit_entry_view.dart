@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
@@ -63,7 +64,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
     try {
       final user = ref.read(sessionControllerProvider);
       if (user == null) {
-        throw Exception('Usuari no trobat');
+        throw Exception(texts.entries.userNotFound);
       }
 
       final updateEntryUseCase = ref.read(updateEntryUseCaseProvider);
@@ -90,7 +91,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
         left: (error) {
           SwardenDialogs.snackBar(
             context,
-            'Error actualitzant entrada: ${error.toString()}',
+            '${texts.entries.errorUpdatingEntry}: ${error.toString()}',
             isError: true,
           );
         },
@@ -98,14 +99,14 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
           if (success) {
             SwardenDialogs.snackBar(
               context,
-              'Entrada actualitzada correctament!',
+              texts.entries.entryUpdatedSuccessfully,
             );
             ref.invalidate(entriesFutureProvider);
             context.pop();
           } else {
             SwardenDialogs.snackBar(
               context,
-              'Error actualitzant entrada',
+              texts.entries.errorUpdatingEntry,
               isError: true,
             );
           }
@@ -114,7 +115,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
     } catch (e) {
       SwardenDialogs.snackBar(
         context,
-        'Error actualitzant entrada: ${e.toString()}',
+        '${texts.entries.errorUpdatingEntry}: ${e.toString()}',
         isError: true,
       );
     } finally {
@@ -150,7 +151,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                         16.w,
                         Expanded(
                           child: Text(
-                            'Editar Entrada',
+                            texts.entries.editEntry,
                             style: context.themeHM?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -195,7 +196,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                               ),
                               12.w,
                               Text(
-                                'Informació de l\'entrada',
+                                texts.entries.entryInfo,
                                 style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.primary,
@@ -209,8 +210,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           TextFormField(
                             controller: _titleController,
                             decoration: InputDecoration(
-                              labelText: 'Títol *',
-                              hintText: 'Ex: Gmail, Netflix, Banc...',
+                              labelText: texts.entries.titleRequired,
+                              hintText: texts.entries.titleHint,
                               prefixIcon: Icon(Icons.title_outlined),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -232,8 +233,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           TextFormField(
                             controller: _usernameController,
                             decoration: InputDecoration(
-                              labelText: 'Nom d\'usuari / Email *',
-                              hintText: 'usuari@exemple.com',
+                              labelText: texts.entries.usernameEmailRequired,
+                              hintText: texts.entries.usernameHint,
                               prefixIcon: Icon(Icons.person_outline),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -256,8 +257,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           TextFormField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                              labelText: 'Contrasenya *',
-                              hintText: 'Introdueix la contrasenya',
+                              labelText: texts.entries.passwordRequired,
+                              hintText: texts.entries.passwordHint,
                               prefixIcon: Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -340,7 +341,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                                   ),
                                   8.w,
                                   Text(
-                                    'Actualitzar Entrada',
+                                    texts.entries.updateEntry,
                                     style: context.themeTM?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
@@ -372,7 +373,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           12.w,
                           Expanded(
                             child: Text(
-                              'Tots els camps són obligatoris. Les dades s\'encriptaran de forma segura.',
+                              texts.entries.requiredFieldsInfo,
                               style: context.themeBS?.copyWith(
                                 color: AppColors.primary,
                               ),

@@ -11,7 +11,7 @@ class VaultSession {
   factory VaultSession.create(Key dek) => VaultSession._(dek);
 
   Key get dek {
-    if (_isLocked) throw const LockedException();
+    if (_isLocked) throw LockedException();
     return _dek;
   }
 

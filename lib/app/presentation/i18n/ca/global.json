@@ -4,5 +4,6 @@
     "anErrorHasOccurred": "S'ha produït un error",
     "createdOn": "Creat el",
     "lastModified": "Modificat el",
-    "swipeToRefresh": "Llisca cap avall per actualitzar les entrades"
+    "swipeToRefresh": "Llisca cap avall per actualitzar les entrades",
+    "vaultLocked": "La bóveda està bloquejada. Cal desbloquejar-la primer."
 }

@@ -4,5 +4,6 @@
     "anErrorHasOccurred": "Se ha producido un error",
     "createdOn": "Creado el",
     "lastModified": "Modificado el",
-    "swipeToRefresh": "Desliza hacia abajo para actualizar las entradas"
+    "swipeToRefresh": "Desliza hacia abajo para actualizar las entradas",
+    "vaultLocked": "La bóveda está bloqueada. Es necesario desbloquearla primero."
 }

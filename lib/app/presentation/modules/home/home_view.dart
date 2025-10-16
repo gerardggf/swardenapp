@@ -84,7 +84,7 @@ class HomeView extends ConsumerWidget {
                     final confirm = SwardenDialogs.dialog(
                       context: context,
                       title: texts.auth.logout,
-                      content: Text('Vols tancar sessió?'),
+                      content: Text(texts.entries.logoutConfirmation),
                     );
                     if (!await confirm) return;
                     await ref
@@ -113,9 +113,7 @@ class HomeView extends ConsumerWidget {
                   final confirm = await SwardenDialogs.dialog(
                     context: context,
                     title: texts.auth.deleteAccount,
-                    content: Text(
-                      'Vols eliminar el teu compte? Aquesta acció és irreversible.  ',
-                    ),
+                    content: Text(texts.entries.deleteAccountConfirmation),
                   );
                   if (!confirm) return;
                   ref.read(sessionControllerProvider.notifier).deleteAccount();
@@ -214,7 +212,7 @@ class HomeView extends ConsumerWidget {
                               left: (error) {
                                 SwardenDialogs.snackBar(
                                   context,
-                                  'Error eliminant la entrada',
+                                  texts.entries.errorDeletingEntry,
                                   isError: true,
                                 );
                               },
@@ -222,13 +220,13 @@ class HomeView extends ConsumerWidget {
                                 if (success) {
                                   SwardenDialogs.snackBar(
                                     context,
-                                    'La entrada s\'ha eliminat correctament',
+                                    texts.entries.entryDeletedSuccessfully,
                                   );
                                   ref.invalidate(entriesFutureProvider);
                                 } else {
                                   SwardenDialogs.snackBar(
                                     context,
-                                    'Error eliminant la entrada',
+                                    texts.entries.errorDeletingEntry,
                                     isError: true,
                                   );
                                 }

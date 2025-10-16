@@ -27,13 +27,6 @@ class Validators {
     if (value == null || value.isEmpty) {
       return texts.auth.theFieldCannotBeEmpty;
     }
-
-    //Min 6 characters, 1 lowercase and 1 uppercase
-    //TODO: apply real pswd regex
-    //RegExp regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z]).{6,}$');
-    // if (!regex.hasMatch(value)) {
-    //   return texts.auth.passwordIsTooWeak;
-    // }
     if (value.length < 6) {
       return texts.auth.passwordIsTooWeak;
     }
@@ -46,6 +39,22 @@ class Validators {
     }
     if (value != pswd) {
       return texts.auth.passwordsDoNotMatch;
+    }
+    return null;
+  }
+
+  static String? validateVaultPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return texts.auth.theFieldCannotBeEmpty;
+    }
+
+    // Mínim 6 caràcters, 1 minúscula i 1 majúscula
+    RegExp regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z]).{6,}$');
+    if (!regex.hasMatch(value)) {
+      return texts.auth.passwordIsTooWeak;
+    }
+    if (value.length < 6) {
+      return texts.auth.passwordIsTooWeak;
     }
     return null;
   }
