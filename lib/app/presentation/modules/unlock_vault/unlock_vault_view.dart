@@ -271,6 +271,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                               ),
                               20.h,
                               TextFormField(
+                                key: const ValueKey('vault_password_field'),
                                 onTapOutside: (_) => FocusManager
                                     .instance
                                     .primaryFocus
@@ -329,6 +330,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                         SizedBox(
                           height: 56,
                           child: ElevatedButton.icon(
+                            key: const ValueKey('unlock_button'),
                             onPressed: _isLoading ? null : _unlockVault,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.orange.shade600,

@@ -53,6 +53,7 @@ class HomeView extends ConsumerWidget {
         ),
         actions: [
           IconButton(
+            key: const ValueKey('add_entry_button'),
             onPressed: () {
               context.pushNamed(NewEntryView.routeName);
             },

@@ -183,6 +183,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                           ),
                           20.h,
                           TextFormField(
+                            key: const ValueKey('entry_title_field'),
                             onTapOutside: (_) =>
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _titleController,
@@ -266,6 +267,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                           ),
                           20.h,
                           TextFormField(
+                            key: const ValueKey('entry_username_field'),
                             onTapOutside: (_) =>
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _usernameController,
@@ -303,6 +305,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                           ),
                           16.h,
                           TextFormField(
+                            key: const ValueKey('entry_password_field'),
                             onTapOutside: (_) =>
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _passwordController,
@@ -356,6 +359,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                     SizedBox(
                       height: 56,
                       child: ElevatedButton.icon(
+                        key: const ValueKey('save_entry_button'),
                         onPressed: _isLoading ? null : _saveEntry,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,

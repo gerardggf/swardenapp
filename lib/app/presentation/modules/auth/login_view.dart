@@ -96,6 +96,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         48.h,
 
                         TextFormField(
+                          key: const ValueKey('email_field'),
                           onTapOutside: (_) =>
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _emailController,
@@ -140,6 +141,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         20.h,
 
                         TextFormField(
+                          key: const ValueKey('password_field'),
                           onTapOutside: (_) =>
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _passwordController,
@@ -201,6 +203,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             ],
                           ),
                           child: ElevatedButton(
+                            key: const ValueKey('sign_in_button'),
                             onPressed: _isLoading ? null : _signIn,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
