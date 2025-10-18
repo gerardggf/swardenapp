@@ -13,5 +13,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Executar l'aplicació amb Riverpod i suport per les traduccions
-  runApp(TranslationProvider(child: const ProviderScope(child: SwardenApp())));
+  runApp(
+    TranslationProvider(child: const ProviderScope(child: AppStartupWidget())),
+  );
 }

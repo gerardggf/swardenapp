@@ -44,5 +44,13 @@
     "copy": "Copiar",
     "show": "Mostrar",
     "hide": "Ocultar",
-    "notSpecified": "No especificado"
+    "notSpecified": "No especificado",
+    "passwordGenerator": "Generador de Contraseñas",
+    "regenerate": "Regenerar",
+    "length": "Longitud",
+    "uppercaseLetters": "Letras mayúsculas (A-Z)",
+    "lowercaseLetters": "Letras minúsculas (a-z)",
+    "numbers": "Números (0-9)",
+    "symbols": "Símbolos (!@#$...)",
+    "usePassword": "Usar Contraseña"
 }

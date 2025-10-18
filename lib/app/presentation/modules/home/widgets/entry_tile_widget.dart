@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import '../../../../domain/models/entry_model.dart';
 
 class EntryTileWidget extends StatelessWidget {

@@ -44,6 +44,14 @@
     "copy": "Copy",
     "show": "Show",
     "hide": "Hide",
-    "notSpecified": "Not specified"
+    "notSpecified": "Not specified",
+    "passwordGenerator": "Password Generator",
+    "regenerate": "Regenerate",
+    "length": "Length",
+    "uppercaseLetters": "Uppercase letters (A-Z)",
+    "lowercaseLetters": "Lowercase letters (a-z)",
+    "numbers": "Numbers (0-9)",
+    "symbols": "Symbols (!@#$...)",
+    "usePassword": "Use Password"
 
 }

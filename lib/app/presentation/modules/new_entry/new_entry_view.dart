@@ -10,7 +10,8 @@ import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/create_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/password_generator_dialog.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';
 import 'package:swardenapp/app/presentation/modules/home/home_view.dart';
@@ -318,17 +319,35 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                               labelText: texts.entries.passwordLabel,
                               hintText: texts.entries.passwordSecureHint,
                               prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
+                              suffixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.vpn_key),
+                                    tooltip: texts.entries.passwordGenerator,
+                                    onPressed: () async {
+                                      final password =
+                                          await showPasswordGeneratorDialog(
+                                            context,
+                                          );
+                                      if (password != null) {
+                                        _passwordController.text = password;
+                                      }
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),

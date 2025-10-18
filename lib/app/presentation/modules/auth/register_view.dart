@@ -8,7 +8,7 @@ import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dar
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';

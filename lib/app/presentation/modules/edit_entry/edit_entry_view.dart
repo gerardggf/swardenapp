@@ -10,7 +10,7 @@ import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/update_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';
 import 'package:swardenapp/app/presentation/modules/home/home_view.dart';
@@ -208,6 +208,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           24.h,
 
                           TextFormField(
+                            onTapOutside: (_) =>
+                                FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _titleController,
                             decoration: InputDecoration(
                               labelText: texts.entries.titleRequiredLabel,
@@ -231,6 +233,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           20.h,
 
                           TextFormField(
+                            onTapOutside: (_) =>
+                                FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _usernameController,
                             decoration: InputDecoration(
                               labelText: texts.entries.usernameEmailRequired,
@@ -255,6 +259,8 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           20.h,
 
                           TextFormField(
+                            onTapOutside: (_) =>
+                                FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _passwordController,
                             decoration: InputDecoration(
                               labelText: texts.entries.passwordRequired,

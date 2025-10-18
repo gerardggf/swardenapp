@@ -40,9 +40,17 @@
     "zeroKnowledgeInfo": "Totes les dades es xifraran amb zero-knowledge abans de guardar-les de forma segura.",
     "errorCreatingEntry": "Error creant entrada",
     "entryCreatedSuccessfully": "Entrada creada correctament!",
-    "copiedToClipboard": "copiat al portapapers",
+    "copiedToClipboard": "copiat al porta-retalls",
     "copy": "Copiar",
     "show": "Mostrar",
-    "hide": "Ocultar",
-    "notSpecified": "No especificat"
+    "hide": "Amagar",
+    "notSpecified": "No especificat",
+    "passwordGenerator": "Generador de Contrasenyes",
+    "regenerate": "Regenerar",
+    "length": "Longitud",
+    "uppercaseLetters": "Lletres majúscules (A-Z)",
+    "lowercaseLetters": "Lletres minúscules (a-z)",
+    "numbers": "Números (0-9)",
+    "symbols": "Símbols (!@#$...)",
+    "usePassword": "Utilitzar Contrasenya"
 }

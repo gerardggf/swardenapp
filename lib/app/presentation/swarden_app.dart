@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/global_providers.dart';
+import 'package:swardenapp/app/presentation/controllers/language_controller.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
 import 'package:swardenapp/app/presentation/global/widgets/loading_widget.dart';
 import 'package:swardenapp/app/presentation/routes/router.dart';
@@ -13,8 +14,10 @@ import '../core/generated/translations.g.dart';
 final appStartupProvider = FutureProvider<void>((ref) async {
   ref.onDispose(() {
     ref.invalidate(packageInfoProvider);
+    ref.invalidate(sharedPreferencesProvider);
   });
   await ref.watch(packageInfoProvider.future);
+  await ref.watch(sharedPreferencesProvider.future);
 });
 
 /// Widget que mostra l'estat d'inici de l'aplicació
@@ -38,6 +41,9 @@ class SwardenApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Observar el locale actual des del language controller
+    final currentLocale = ref.watch(languageControllerProvider);
+
     return MaterialApp.router(
       title: Global.appName,
       // Amagar el banner de debug
@@ -47,7 +53,7 @@ class SwardenApp extends ConsumerWidget {
       //Idiomes suportats: Català, Castellà i Anglès
       supportedLocales: AppLocaleUtils.supportedLocales,
       // Locale de l'aplicació
-      locale: TranslationProvider.of(context).flutterLocale,
+      locale: currentLocale.flutterLocale,
       // Configuració de les rutes
       routerConfig: ref.watch(goRouterProvider),
       // Tema de l'aplicació

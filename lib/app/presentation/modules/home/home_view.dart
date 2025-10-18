@@ -5,7 +5,6 @@ import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
-import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
@@ -13,12 +12,12 @@ import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/get_user_entries_use_case.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/delete_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
-import 'package:swardenapp/app/presentation/global/dialogs/language_dialog.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
 import 'package:swardenapp/app/presentation/global/widgets/loading_widget.dart';
 import 'package:swardenapp/app/presentation/modules/edit_entry/edit_entry_view.dart';
 import 'package:swardenapp/app/presentation/modules/entry/entry_view.dart';
+import 'package:swardenapp/app/presentation/modules/home/swarden_drawer.dart';
 import 'package:swardenapp/app/presentation/modules/home/widgets/entry_tile_widget.dart';
 import 'package:swardenapp/app/presentation/modules/new_entry/new_entry_view.dart';
 
@@ -45,6 +44,7 @@ class HomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final entriesFuture = ref.watch(entriesFutureProvider);
     return Scaffold(
+      drawer: SwardenDrawer(),
       appBar: AppBar(
         title: Row(
           children: [
@@ -60,123 +60,6 @@ class HomeView extends ConsumerWidget {
               context.pushNamed(NewEntryView.routeName);
             },
             icon: const Icon(Icons.add, size: 30),
-          ),
-          PopupMenuButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                enabled: false,
-                child: Row(
-                  children: [
-                    const Icon(Icons.person, color: Colors.black),
-                    10.w,
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        ref.watch(sessionControllerProvider)?.email ?? '',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () async {
-                  final selectedLocale = await showLanguageDialog(context);
-                  if (selectedLocale != null) {
-                    LocaleSettings.setLocale(selectedLocale);
-                  }
-                },
-                child: Row(
-                  children: [
-                    const Icon(Icons.language),
-                    10.w,
-                    Text(texts.profile.changeLanguage),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () async {
-                  try {
-                    final confirm = SwardenDialogs.dialog(
-                      context: context,
-                      title: texts.auth.logout,
-                      content: Text(texts.entries.logoutConfirmation),
-                    );
-                    if (!await confirm) return;
-                    await ref
-                        .read(sessionControllerProvider.notifier)
-                        .signOut();
-                  } catch (e) {
-                    if (context.mounted) {
-                      SwardenDialogs.snackBar(
-                        context,
-                        texts.auth.anErrorHasOccurred,
-                        isError: true,
-                      );
-                    }
-                  }
-                },
-                child: Row(
-                  children: [
-                    const Icon(Icons.logout),
-                    10.w,
-                    Text(texts.auth.logout),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () async {
-                  final confirm = await SwardenDialogs.dialog(
-                    context: context,
-                    title: texts.auth.deleteAccount,
-                    content: Text(texts.entries.deleteAccountConfirmation),
-                  );
-                  if (!confirm) return;
-                  if (!context.mounted) return;
-                  final password = await SwardenDialogs.textFieldDialog(
-                    context: context,
-                    text: texts
-                        .profile
-                        .enterYourPasswordToVerifyTheDeletionOfYourAccount,
-                    hintText: texts.auth.passwordHint,
-                  );
-                  if (password == null || password.isEmpty) return;
-                  try {
-                    final result = await ref
-                        .read(sessionControllerProvider.notifier)
-                        .deleteAccount(password);
-
-                    result.when(
-                      left: (error) {
-                        SwardenDialogs.snackBar(
-                          context,
-                          error.toText(),
-                          isError: true,
-                        );
-                      },
-                      right: (success) {},
-                    );
-                  } catch (e) {
-                    if (context.mounted) {
-                      SwardenDialogs.snackBar(
-                        context,
-                        texts.auth.anErrorHasOccurred,
-                        isError: true,
-                      );
-                    }
-                  }
-                },
-                child: Row(
-                  children: [
-                    const Icon(Icons.delete),
-                    10.w,
-                    Text(texts.auth.deleteAccount),
-                  ],
-                ),
-              ),
-            ],
           ),
         ],
       ),

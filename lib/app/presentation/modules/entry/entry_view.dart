@@ -10,7 +10,7 @@ import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/delete_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/widgets/warning_widget.dart';
 import 'package:swardenapp/app/presentation/modules/edit_entry/edit_entry_view.dart';
 import 'package:swardenapp/app/presentation/modules/entry/widgets/info_card_widget.dart';

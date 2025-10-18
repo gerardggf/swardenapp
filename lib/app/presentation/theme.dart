@@ -22,6 +22,13 @@ class SwardenTheme {
         return AppColors.secondary;
       }),
     ),
+    sliderTheme: SliderThemeData(
+      valueIndicatorColor: AppColors.primary,
+      activeTrackColor: AppColors.primary,
+      thumbColor: AppColors.primary,
+      inactiveTrackColor: AppColors.primary.withAlpha(100),
+      overlayColor: AppColors.primary.withAlpha(50),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primary,

@@ -4,7 +4,7 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
-import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 
 class InfoCardWidget extends StatefulWidget {
   const InfoCardWidget({
