@@ -42,7 +42,7 @@ class SessionController extends StateNotifier<UserModel?> {
     String password,
     String vaultPassword,
   ) async {
-    final user = await registerUserUseCase(
+    final user = await registerUserUseCase.call(
       RegisterUserParams(
         email: email,
         password: password,
@@ -58,7 +58,7 @@ class SessionController extends StateNotifier<UserModel?> {
     String email,
     String password,
   ) async {
-    final user = await signInUseCase(
+    final user = await signInUseCase.call(
       SignInParams(email: email, password: password),
     );
 
@@ -67,7 +67,7 @@ class SessionController extends StateNotifier<UserModel?> {
   }
 
   Future<Either<SwardenException, UserModel?>> restoreSession() async {
-    final userResult = await getCurrentUserUseCase();
+    final userResult = await getCurrentUserUseCase.call();
 
     return userResult.when(
       left: (exception) {
@@ -86,12 +86,22 @@ class SessionController extends StateNotifier<UserModel?> {
   }
 
   Future<void> signOut() async {
-    await signOutUseCase();
+    await signOutUseCase.call();
     state = null;
   }
 
-  Future<void> deleteAccount() async {
-    await deleteAccountUseCase();
-    state = null;
+  Future<Either<SwardenException, bool>> deleteAccount(String password) async {
+    final result = await deleteAccountUseCase.call(
+      DeleteAccountParams(password: password),
+    );
+    result.when(
+      left: (_) {},
+      right: (r) {
+        if (!r) return;
+        return state = null;
+      },
+    );
+
+    return result;
   }
 }

@@ -6,6 +6,7 @@ import 'package:swardenapp/app/core/constants/urls.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/functions/launch_url.dart';
@@ -90,7 +91,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             ),
                             24.h,
                             Text(
-                              'Crea el teu compte',
+                              texts.auth.createYourAccount,
                               style: context.themeHM?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
@@ -98,7 +99,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             ),
                             8.h,
                             Text(
-                              'Registra\'t per comen\u00e7ar a gestionar les teves contrasenyes de forma segura',
+                              texts.auth.registerSubtitle,
                               style: context.themeBM?.copyWith(
                                 color: Colors.grey.shade600,
                               ),
@@ -113,7 +114,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _emailController,
                           decoration: InputDecoration(
-                            hintText: 'Email',
+                            hintText: texts.auth.email,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -136,7 +137,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             ),
                             filled: true,
                             fillColor: Colors.grey.shade50,
-                            helperText: 'Aquest serà el teu identificador únic',
+                            helperText: texts.auth.emailHelperText,
                             helperStyle: TextStyle(color: Colors.grey.shade600),
                           ),
                           keyboardType: TextInputType.emailAddress,
@@ -150,7 +151,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            hintText: 'Contrasenya',
+                            hintText: texts.auth.password,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -187,7 +188,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             ),
                             filled: true,
                             fillColor: Colors.grey.shade50,
-                            helperText: 'Mínim 6 caràcters',
+                            helperText: texts.auth.passwordMinChars,
                             helperStyle: TextStyle(color: Colors.grey.shade600),
                           ),
                           obscureText: _obscurePswrd,
@@ -202,7 +203,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _confirmPasswordController,
                           decoration: InputDecoration(
-                            hintText: 'Confirmar Contrasenya',
+                            hintText: texts.auth.confirmPassword,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -258,7 +259,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                 horizontal: 16,
                               ),
                               child: Text(
-                                'Contrasenya de la bóveda',
+                                texts.auth.vaultPasswordDivider,
                                 style: context.themeBM?.copyWith(
                                   color: Colors.grey.shade600,
                                   fontWeight: FontWeight.w500,
@@ -272,8 +273,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         WarningWidget(
                           color: const Color.fromARGB(255, 18, 132, 147),
                           bgColor: Colors.blue.shade50,
-                          content:
-                              'Aquesta contrasenya protegeix les teves dades i mai es guardarà als nostres servidors. Zero-knowledge garantit!',
+                          content: texts.auth.vaultPasswordWarning,
                           icon: Icons.shield,
                         ),
 
@@ -284,7 +284,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _vaultPasswordController,
                           decoration: InputDecoration(
-                            hintText: 'Contrasenya de la bóveda',
+                            hintText: texts.auth.vaultPasswordHint,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -321,8 +321,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                             ),
                             filled: true,
                             fillColor: Colors.grey.shade50,
-                            helperText:
-                                'Aquesta contrasenya desxifra les teves dades',
+                            helperText: texts.auth.vaultPasswordHelperText,
                             helperStyle: TextStyle(color: Colors.grey.shade600),
                           ),
                           obscureText: _obscureVaultPswrd,
@@ -337,7 +336,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _confirmVaultPasswordController,
                           decoration: InputDecoration(
-                            hintText: 'Confirmar Contrasenya de la bóveda',
+                            hintText: texts.auth.confirmVaultPassword,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -387,9 +386,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                         24.h,
 
                         WarningWidget(
-                          title: 'IMPORTANT',
-                          content:
-                              'Les contrasenyes no es podran canviar després del registre. Assegura\'t que les recordis!',
+                          title: texts.auth.importantWarningTitle,
+                          content: texts.auth.importantWarningContent,
                           icon: Icons.warning_amber,
                         ),
                         20.h,
@@ -420,11 +418,11 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                     text: TextSpan(
                                       style: context.themeBM,
                                       children: [
-                                        const TextSpan(
-                                          text: 'He llegit i accepto la ',
+                                        TextSpan(
+                                          text: texts.auth.iHaveReadAndAccept,
                                         ),
                                         TextSpan(
-                                          text: 'Política de Privacitat',
+                                          text: texts.auth.privacyPolicyLink,
                                           style: TextStyle(
                                             color: AppColors.primary,
                                             decoration:
@@ -493,7 +491,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                                     ),
                                   )
                                 : Text(
-                                    'Registrar-se',
+                                    texts.auth.registerButton,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -527,7 +525,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     if (!_acceptsPrivacyPolicy) {
       SwardenDialogs.snackBar(
         context,
-        'Has d\'acceptar la Política de Privacitat per continuar',
+        texts.auth.mustAcceptPrivacyPolicy,
         isWarning: true,
       );
       return;

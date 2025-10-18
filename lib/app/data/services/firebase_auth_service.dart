@@ -62,13 +62,41 @@ class FirebaseAuthService {
     await auth.signOut();
   }
 
+  /// Reautenticar usuari amb la seva contrasenya
+  Future<bool> reauthenticate(String password) async {
+    try {
+      final user = auth.currentUser;
+      if (user?.email == null) return false;
+
+      final credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Eliminar compte
   Future<bool> deleteUserAccount() async {
-    final user = auth.currentUser;
-    if (user != null) {
-      await user.delete();
-      return true;
+    try {
+      final user = auth.currentUser;
+      if (user != null) {
+        await user.delete();
+        return true;
+      }
+      return false;
+    } on FirebaseAuthException catch (e) {
+      // Si requereix autenticació recent, retorna false perquè el controlador pugui gestionar-ho
+      if (e.code == 'requires-recent-login') {
+        rethrow;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
-    return false;
   }
 }

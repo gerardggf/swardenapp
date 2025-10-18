@@ -23,5 +23,6 @@ abstract class AuthRepo {
     String vaultPassword,
   );
   AsyncSwardenResult<UserModel?> getCurrentUser();
+  Future<bool> reauthenticate(String password);
   Future<bool> deleteAccount();
 }

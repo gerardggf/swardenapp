@@ -6,6 +6,7 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 import 'package:swardenapp/app/presentation/modules/auth/register_view.dart';
@@ -77,7 +78,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             ),
                             24.h,
                             Text(
-                              'Benvingut!',
+                              texts.auth.welcomeLogin,
                               style: context.themeHM?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.primary,
@@ -85,7 +86,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             ),
                             8.h,
                             Text(
-                              'Inicia sessió per accedir al teu gestor de contrasenyes',
+                              texts.auth.loginSubtitle,
                               style: context.themeBM?.copyWith(
                                 color: Colors.grey.shade600,
                               ),
@@ -101,7 +102,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _emailController,
                           decoration: InputDecoration(
-                            hintText: 'Email',
+                            hintText: texts.auth.emailHint,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -128,12 +129,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Introdueix el teu email';
+                              return texts.auth.enterYourEmail;
                             }
                             if (!RegExp(
                               r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                             ).hasMatch(value)) {
-                              return 'Introdueix un email vàlid';
+                              return texts.auth.enterValidEmail;
                             }
                             return null;
                           },
@@ -146,7 +147,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               FocusManager.instance.primaryFocus?.unfocus(),
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            hintText: 'Contrasenya',
+                            hintText: texts.auth.passwordHint,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -173,10 +174,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Introdueix la teva contrasenya';
+                              return texts.auth.enterYourPassword;
                             }
                             if (value.length < 6) {
-                              return 'La contrasenya ha de tenir almenys 6 caràcters';
+                              return texts.auth.passwordMinLength;
                             }
                             return null;
                           },
@@ -223,9 +224,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                       ),
                                     ),
                                   )
-                                : const Text(
-                                    'Iniciar Sessió',
-                                    style: TextStyle(
+                                : Text(
+                                    texts.auth.signInButton,
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
@@ -238,7 +239,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('No tens compte?', style: context.themeBL),
+                            Text(
+                              texts.auth.dontHaveAccount,
+                              style: context.themeBL,
+                            ),
                             TextButton(
                               onPressed: () {
                                 context.pushNamed(RegisterView.routeName);
@@ -249,7 +253,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                 ),
                               ),
                               child: Text(
-                                'Registra\'t',
+                                texts.auth.registerNow,
                                 style: context.themeBL?.copyWith(
                                   color: AppColors.primary,
 

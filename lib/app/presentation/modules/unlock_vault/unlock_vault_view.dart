@@ -46,7 +46,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
     final user = ref.read(sessionControllerProvider);
     if (user == null) {
-      throw Exception('Usuari no trobat');
+      throw Exception(texts.entries.userNotFound);
     }
 
     try {
@@ -156,7 +156,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                         24.h,
 
                         Text(
-                          'Bóveda Bloquejada',
+                          texts.auth.vaultLocked,
                           style: context.themeHM?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
@@ -166,7 +166,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                         8.h,
 
                         Text(
-                          'Introdueix la teva contrasenya per desbloquejar les teves entrades',
+                          texts.auth.vaultLockedSubtitle,
                           style: context.themeBM?.copyWith(
                             color: Colors.grey.shade600,
                           ),
@@ -204,14 +204,14 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      user?.email ?? 'Usuari',
+                                      user?.email ?? texts.auth.user,
                                       style: context.themeTM?.copyWith(
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     4.h,
                                     Text(
-                                      'Sessió activa',
+                                      texts.auth.activeSession,
                                       style: context.themeBS?.copyWith(
                                         color: Colors.green.shade600,
                                       ),
@@ -262,7 +262,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                   ),
                                   12.w,
                                   Text(
-                                    'Contrasenya Mestra',
+                                    texts.auth.masterPassword,
                                     style: context.themeTM?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -280,9 +280,8 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                 obscureText: _obscurePassword,
                                 autofocus: true,
                                 decoration: InputDecoration(
-                                  labelText: 'Contrasenya',
-                                  hintText:
-                                      'Introdueix la teva contrasenya mestra',
+                                  labelText: texts.auth.password,
+                                  hintText: texts.auth.enterMasterPassword,
                                   prefixIcon: const Icon(Icons.lock_outline),
                                   suffixIcon: IconButton(
                                     icon: Icon(
@@ -355,8 +354,8 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
                                 : const Icon(Icons.lock_open_outlined),
                             label: Text(
                               _isLoading
-                                  ? 'Desbloquejant...'
-                                  : 'Desbloquejar bóveda',
+                                  ? texts.auth.unlocking
+                                  : texts.auth.unlockVault,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
@@ -367,8 +366,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
                         20.h,
                         WarningWidget(
-                          content:
-                              'Les teves entrades estan protegides amb xifratge zero-knowledge. Només tu pots accedir-hi.',
+                          content: texts.auth.vaultProtectionInfo,
                           icon: Icons.shield_outlined,
                           color: const Color.fromARGB(255, 28, 120, 195),
                           bgColor: Colors.blue.shade50,

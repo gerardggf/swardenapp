@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
 
 class InfoCardWidget extends StatefulWidget {
@@ -37,7 +38,10 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
   ) async {
     await Clipboard.setData(ClipboardData(text: text));
     if (!context.mounted) return;
-    SwardenDialogs.snackBar(context, '$label copiat al portapapers');
+    SwardenDialogs.snackBar(
+      context,
+      '$label ${texts.entries.copiedToClipboard}',
+    );
   }
 
   @override
@@ -92,7 +96,7 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
                   ),
                   onPressed: () =>
                       _copyToClipboard(context, widget.value, widget.title),
-                  tooltip: 'Copiar',
+                  tooltip: texts.entries.copy,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.grey.shade100,
                     padding: const EdgeInsets.all(8),
@@ -113,7 +117,9 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
                       _obscurePassword = !_obscurePassword;
                     });
                   },
-                  tooltip: _obscurePassword ? 'Mostrar' : 'Ocultar',
+                  tooltip: _obscurePassword
+                      ? texts.entries.show
+                      : texts.entries.hide,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.grey.shade100,
                     padding: const EdgeInsets.all(8),
@@ -131,7 +137,9 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                widget.value.isEmpty ? 'No especificat' : '••••••••••••',
+                widget.value.isEmpty
+                    ? texts.entries.notSpecified
+                    : '••••••••••••',
                 style: TextStyle(
                   fontSize: 16,
                   color: widget.value.isEmpty
@@ -151,7 +159,9 @@ class _InfoCardWidgetState extends State<InfoCardWidget> {
                 border: Border.all(color: Colors.grey.shade200),
               ),
               child: SelectableText(
-                widget.value.isEmpty ? 'No especificat' : widget.value,
+                widget.value.isEmpty
+                    ? texts.entries.notSpecified
+                    : widget.value,
                 style: TextStyle(
                   fontSize: 16,
                   color: widget.value.isEmpty

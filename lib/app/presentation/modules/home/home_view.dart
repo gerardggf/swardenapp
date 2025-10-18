@@ -5,6 +5,7 @@ import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
+import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
@@ -13,6 +14,7 @@ import 'package:swardenapp/app/domain/use_cases/entries/get_user_entries_use_cas
 import 'package:swardenapp/app/domain/use_cases/entries/delete_entry_use_case.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs.dart';
+import 'package:swardenapp/app/presentation/global/dialogs/language_dialog.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
 import 'package:swardenapp/app/presentation/global/widgets/loading_widget.dart';
 import 'package:swardenapp/app/presentation/modules/edit_entry/edit_entry_view.dart';
@@ -27,7 +29,7 @@ final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
   }
 
   final getUserEntriesUseCase = ref.read(getUserEntriesUseCaseProvider);
-  final result = await getUserEntriesUseCase(
+  final result = await getUserEntriesUseCase.call(
     GetUserEntriesParams(userId: userId),
   );
 
@@ -81,6 +83,21 @@ class HomeView extends ConsumerWidget {
               ),
               PopupMenuItem(
                 onTap: () async {
+                  final selectedLocale = await showLanguageDialog(context);
+                  if (selectedLocale != null) {
+                    LocaleSettings.setLocale(selectedLocale);
+                  }
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.language),
+                    10.w,
+                    Text(texts.profile.changeLanguage),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () async {
                   try {
                     final confirm = SwardenDialogs.dialog(
                       context: context,
@@ -117,7 +134,39 @@ class HomeView extends ConsumerWidget {
                     content: Text(texts.entries.deleteAccountConfirmation),
                   );
                   if (!confirm) return;
-                  ref.read(sessionControllerProvider.notifier).deleteAccount();
+                  if (!context.mounted) return;
+                  final password = await SwardenDialogs.textFieldDialog(
+                    context: context,
+                    text: texts
+                        .profile
+                        .enterYourPasswordToVerifyTheDeletionOfYourAccount,
+                    hintText: texts.auth.passwordHint,
+                  );
+                  if (password == null || password.isEmpty) return;
+                  try {
+                    final result = await ref
+                        .read(sessionControllerProvider.notifier)
+                        .deleteAccount(password);
+
+                    result.when(
+                      left: (error) {
+                        SwardenDialogs.snackBar(
+                          context,
+                          error.toText(),
+                          isError: true,
+                        );
+                      },
+                      right: (success) {},
+                    );
+                  } catch (e) {
+                    if (context.mounted) {
+                      SwardenDialogs.snackBar(
+                        context,
+                        texts.auth.anErrorHasOccurred,
+                        isError: true,
+                      );
+                    }
+                  }
                 },
                 child: Row(
                   children: [
@@ -199,7 +248,7 @@ class HomeView extends ConsumerWidget {
                             final deleteEntryUseCase = ref.read(
                               deleteEntryUseCaseProvider,
                             );
-                            final result = await deleteEntryUseCase(
+                            final result = await deleteEntryUseCase.call(
                               DeleteEntryParams(
                                 userId: ref
                                     .read(sessionControllerProvider)!

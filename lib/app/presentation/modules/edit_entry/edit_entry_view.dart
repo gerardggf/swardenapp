@@ -77,7 +77,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
         createdAt: widget.entryData.createdAt,
       );
 
-      final result = await updateEntryUseCase(
+      final result = await updateEntryUseCase.call(
         UpdateEntryParams(
           userId: user.uid,
           entryId: widget.entryData.id!,
@@ -210,7 +210,7 @@ class _EditEntryViewState extends ConsumerState<EditEntryView> {
                           TextFormField(
                             controller: _titleController,
                             decoration: InputDecoration(
-                              labelText: texts.entries.titleRequired,
+                              labelText: texts.entries.titleRequiredLabel,
                               hintText: texts.entries.titleHint,
                               prefixIcon: Icon(Icons.title_outlined),
                               border: OutlineInputBorder(

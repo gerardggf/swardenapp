@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
+import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
@@ -48,12 +49,12 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
     try {
       final user = ref.read(sessionControllerProvider);
       if (user == null) {
-        throw Exception('Usuari no trobat');
+        throw Exception(texts.entries.userNotFound);
       }
 
       final createEntryUseCase = ref.read(createEntryUseCaseProvider);
 
-      final result = await createEntryUseCase(
+      final result = await createEntryUseCase.call(
         CreateEntryParams(
           userId: user.uid,
           entry: EntryDataModel(
@@ -71,19 +72,22 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
         left: (error) {
           SwardenDialogs.snackBar(
             context,
-            'Error creant entrada: ${error.toString()}',
+            '${texts.entries.errorCreatingEntry}: ${error.toString()}',
             isError: true,
           );
         },
         right: (success) {
           if (success) {
-            SwardenDialogs.snackBar(context, 'Entrada creada correctament!');
+            SwardenDialogs.snackBar(
+              context,
+              texts.entries.entryCreatedSuccessfully,
+            );
             ref.invalidate(entriesFutureProvider);
             context.pop();
           } else {
             SwardenDialogs.snackBar(
               context,
-              'Error creant entrada',
+              texts.entries.errorCreatingEntry,
               isError: true,
             );
           }
@@ -92,7 +96,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
     } catch (e) {
       SwardenDialogs.snackBar(
         context,
-        'Error creant entrada: ${e.toString()}',
+        '${texts.entries.errorCreatingEntry}: ${e.toString()}',
         isError: true,
       );
     } finally {
@@ -128,7 +132,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                         16.w,
                         Expanded(
                           child: Text(
-                            'Nova Entrada',
+                            texts.entries.newEntry,
                             style: context.themeHM?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -173,7 +177,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                               ),
                               12.w,
                               Text(
-                                'Informació General',
+                                texts.entries.generalInfo,
                                 style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primary,
@@ -188,8 +192,8 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _titleController,
                             decoration: InputDecoration(
-                              labelText: 'Títol de l\'entrada',
-                              hintText: 'Ex: GitHub, Gmail, Facebook...',
+                              labelText: texts.entries.entryTitle,
+                              hintText: texts.entries.entryTitleHint,
                               prefixIcon: const Icon(Icons.label_outline),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -214,7 +218,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'El títol és obligatori';
+                                return texts.entries.titleRequiredLabel;
                               }
                               return null;
                             },
@@ -257,7 +261,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                               ),
                               12.w,
                               Text(
-                                'Credencials d\'Accés',
+                                texts.entries.accessCredentials,
                                 style: context.themeTM?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green.shade700,
@@ -272,8 +276,8 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                                 FocusManager.instance.primaryFocus?.unfocus(),
                             controller: _usernameController,
                             decoration: InputDecoration(
-                              labelText: 'Nom d\'usuari o email',
-                              hintText: 'email@example.com',
+                              labelText: texts.entries.usernameOrEmail,
+                              hintText: texts.entries.usernameOrEmailHint,
                               prefixIcon: const Icon(Icons.person_outline),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -298,7 +302,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'El nom d\'usuari és obligatori';
+                                return texts.entries.usernameRequired;
                               }
                               return null;
                             },
@@ -311,8 +315,8 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                             controller: _passwordController,
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
-                              labelText: 'Contrasenya',
-                              hintText: 'Contrasenya segura',
+                              labelText: texts.entries.passwordLabel,
+                              hintText: texts.entries.passwordSecureHint,
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -384,8 +388,8 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                             : const Icon(Icons.save_outlined),
                         label: Text(
                           _isLoading
-                              ? 'Guardant entrada...'
-                              : 'Guardar Entrada',
+                              ? texts.entries.savingEntry
+                              : texts.entries.saveEntry,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -416,7 +420,7 @@ class _NewEntryViewState extends ConsumerState<NewEntryView> {
                           12.w,
                           Expanded(
                             child: Text(
-                              'Totes les dades es xifraran amb zero-knowledge abans de guardar-les de forma segura.',
+                              texts.entries.zeroKnowledgeInfo,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.blue.shade700,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:swardenapp/app/core/typedefs.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
@@ -130,20 +131,28 @@ class AuthRepoImpl implements AuthRepo {
       final uid = firebaseAuthService.currentUser?.uid;
       if (uid == null) return false;
 
-      // Es bloqueja la bóveda abans d'eliminar el compte
-      cryptoService.lock();
-
-      // Esborra l'usuari de Firebase Auth
       final authDeleted = await firebaseAuthService.deleteUserAccount();
       if (!authDeleted) return false;
-      // Esborra l'usuari de Firestore si s'ha esborrat de Firebase Auth
+
       final firestoreDeleted = await firestoreService.deleteUser(uid);
       return firestoreDeleted;
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print(
+          'FirebaseAuthException deleting account: ${e.code} - ${e.message}',
+        );
+      }
+      rethrow;
     } catch (e) {
       if (kDebugMode) {
         print('Error deleting account: $e');
       }
       return false;
     }
+  }
+
+  @override
+  Future<bool> reauthenticate(String password) {
+    return firebaseAuthService.reauthenticate(password);
   }
 }

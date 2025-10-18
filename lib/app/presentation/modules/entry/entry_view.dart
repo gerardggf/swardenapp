@@ -74,7 +74,6 @@ class _EntryViewState extends ConsumerState<EntryView> {
                             extra: widget.entry,
                           );
                         },
-                        tooltip: texts.entries.edit,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.white.withAlpha(230),
                           padding: const EdgeInsets.all(12),
@@ -98,7 +97,7 @@ class _EntryViewState extends ConsumerState<EntryView> {
                           final deleteEntryUseCase = ref.read(
                             deleteEntryUseCaseProvider,
                           );
-                          final result = await deleteEntryUseCase(
+                          final result = await deleteEntryUseCase.call(
                             DeleteEntryParams(
                               userId: ref.watch(sessionControllerProvider)!.uid,
                               entryId: widget.entry.id!,
@@ -133,7 +132,6 @@ class _EntryViewState extends ConsumerState<EntryView> {
                             },
                           );
                         },
-                        tooltip: texts.entries.delete,
                         style: IconButton.styleFrom(
                           backgroundColor: Colors.white.withAlpha(230),
                           padding: const EdgeInsets.all(12),
