@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swardenapp/app/core/constants/assets.dart';
+import 'package:swardenapp/app/core/constants/colors.dart';
+import 'package:swardenapp/app/core/constants/global.dart';
+import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/extensions/swarden_exceptions_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
@@ -19,22 +23,40 @@ class SwardenDrawer extends ConsumerWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Colors.blue),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            decoration: const BoxDecoration(color: AppColors.primary),
+            child: Row(
               children: [
-                const Text(
-                  'Swarden',
-                  style: TextStyle(
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
                     color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
                   ),
+                  padding: const EdgeInsets.all(10),
+                  child: Image.asset(Assets.icon, height: 40, width: 40),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'User: ${ref.watch(sessionControllerProvider)?.email ?? ''}',
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                10.w,
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        Global.appName,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        ref.watch(sessionControllerProvider)?.email ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

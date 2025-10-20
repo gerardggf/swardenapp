@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
+import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 
 Future<String?> showPasswordGeneratorDialog(
@@ -108,7 +109,7 @@ class _PasswordGeneratorDialogState extends State<PasswordGeneratorDialog> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            24.h,
             Text(
               '${texts.entries.length}: $_length',
               style: const TextStyle(fontWeight: FontWeight.w600),

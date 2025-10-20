@@ -42,7 +42,7 @@ class EntryTileWidget extends StatelessWidget {
             Row(
               children: [
                 Icon(Icons.storage, size: 14, color: Colors.grey[600]),
-                const SizedBox(width: 4),
+                4.w,
                 Text(
                   entry.createdAt.toIso8601String().split('T').first,
                   style: TextStyle(color: Colors.grey[600], fontSize: 12),
