@@ -44,7 +44,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# A l'arxiu per defecte del .gitignore per projectes Flutter afegirem els arxius generats.
 lib/app/core/generated/
 *.g.dart
 *.freezed.dart
 *.mocks.dart
+
+# L'arxius del keystore d'Android ja s'inclou en el .gitignore dle projecte d'Android
