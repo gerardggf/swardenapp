@@ -52,5 +52,7 @@
     "lowercaseLetters": "Letras minúsculas (a-z)",
     "numbers": "Números (0-9)",
     "symbols": "Símbolos (!@#$...)",
-    "usePassword": "Usar Contraseña"
+    "usePassword": "Usar Contraseña",
+    "searchEntries": "Buscar entradas...",
+    "noEntriesFound": "No se encontraron entradas"
 }

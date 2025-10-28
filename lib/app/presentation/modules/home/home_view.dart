@@ -11,6 +11,7 @@ import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/domain/use_cases/use_case_providers.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/get_user_entries_use_case.dart';
 import 'package:swardenapp/app/domain/use_cases/entries/delete_entry_use_case.dart';
+import 'package:swardenapp/app/presentation/controllers/language_controller.dart';
 import 'package:swardenapp/app/presentation/controllers/session_controller.dart';
 import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/widgets/error_info_widget.dart';
@@ -35,13 +36,44 @@ final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
   return result.when(left: (_) => [], right: (r) => r);
 });
 
-class HomeView extends ConsumerWidget {
+class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
   static const routeName = '/home';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends ConsumerState<HomeView> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<EntryDataModel> _filterEntries(List<EntryDataModel> entries) {
+    if (_searchQuery.isEmpty) return entries;
+
+    return entries.where((entry) {
+      final titleMatch = entry.title.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final usernameMatch = entry.username.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      return titleMatch || usernameMatch;
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Observar els canvis d'idioma per reconstruir la vista
+    ref.watch(languageControllerProvider);
+
     final entriesFuture = ref.watch(entriesFutureProvider);
     return Scaffold(
       drawer: SwardenDrawer(),
@@ -82,6 +114,8 @@ class HomeView extends ConsumerWidget {
             onRefresh: () => ref.refresh(entriesFutureProvider.future),
             child: entriesFuture.when(
               data: (entries) {
+                final filteredEntries = _filterEntries(entries);
+
                 return ListView(
                   children: [
                     Padding(
@@ -107,8 +141,83 @@ class HomeView extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    ...List.generate(entries.length, (index) {
-                      final entry = entries[index];
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: texts.entries.searchEntries,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: AppColors.primary,
+                          ),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    setState(() {
+                                      _searchQuery = '';
+                                    });
+                                  },
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                              width: 2,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (filteredEntries.isEmpty && _searchQuery.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 64,
+                              color: Colors.grey.shade400,
+                            ),
+                            16.h,
+                            Text(
+                              texts.entries.noEntriesFound,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ...List.generate(filteredEntries.length, (index) {
+                      final entry = filteredEntries[index];
                       return Padding(
                         padding: EdgeInsets.only(
                           bottom: index == entries.length - 1 ? 0 : 10,

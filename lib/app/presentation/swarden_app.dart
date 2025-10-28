@@ -28,7 +28,7 @@ class AppStartupWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appStartupState = ref.watch(appStartupProvider);
     return appStartupState.when(
-      data: (_) => const SwardenApp(),
+      data: (_) => TranslationProvider(child: const SwardenApp()),
       error: (e, __) => const AppStartupErrorWidget(),
       loading: () => const AppStartupLoadingWidget(),
     );

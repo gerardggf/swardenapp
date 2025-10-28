@@ -52,6 +52,8 @@
     "lowercaseLetters": "Lowercase letters (a-z)",
     "numbers": "Numbers (0-9)",
     "symbols": "Symbols (!@#$...)",
-    "usePassword": "Use Password"
+    "usePassword": "Use Password",
+    "searchEntries": "Search entries...",
+    "noEntriesFound": "No entries found"
 
 }

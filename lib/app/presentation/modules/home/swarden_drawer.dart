@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/constants/assets.dart';
 import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/constants/global.dart';
@@ -69,6 +70,8 @@ class SwardenDrawer extends ConsumerWidget {
                 ref
                     .read(languageControllerProvider.notifier)
                     .changeLocale(selectedLocale);
+                if (!context.mounted) return;
+                context.pop();
               }
             },
             title: Text(texts.profile.changeLanguage),
