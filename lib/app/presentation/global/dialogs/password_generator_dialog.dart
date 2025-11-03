@@ -173,7 +173,7 @@ class _PasswordGeneratorDialogState extends State<PasswordGeneratorDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
           child: Text(texts.global.cancel),
         ),
         if (widget.copyPswdOption)

@@ -14,6 +14,7 @@ Executa:
 
 Executa:
 - flutter test
+- flutter drive --target=test_driver/app.dart
 
 
 ## Política de privacitat
