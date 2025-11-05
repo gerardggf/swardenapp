@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:math';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kReleaseMode, debugPrint;
 import 'package:pointycastle/export.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,6 +61,14 @@ class CryptoService {
   /// Deriva la Key Encryption Key (KEK) usant Argon2id
   Key _deriveKEK(String password, String salt) {
     try {
+      // Prova de rendiment: Timestamp abans de la derivació de clau
+      final startTime = DateTime.now();
+      if (!kReleaseMode) {
+        debugPrint(
+          'COMENÇANT DERIVACIÓ DE CLAU: ${startTime.toIso8601String()}',
+        );
+      }
+
       final passwordBytes = utf8.encode(password);
       final saltBytes = base64Decode(salt);
 
@@ -76,6 +85,19 @@ class CryptoService {
         );
 
       final keyBytes = argon2.process(Uint8List.fromList(passwordBytes));
+
+      // Prova de rendiment: Timestamp després de la derivació de clau
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+      if (!kReleaseMode) {
+        debugPrint(
+          'FINALITZANT DERIVACIÓ DE CLAU: ${endTime.toIso8601String()}',
+        );
+        debugPrint(
+          'DURACIÓ: ${duration.inMilliseconds}ms (${duration.inMicroseconds}μs)',
+        );
+      }
+
       return Key(keyBytes);
     } catch (e) {
       throw CryptoException('Error derivant KEK amb Argon2id: $e');
@@ -149,12 +171,32 @@ class CryptoService {
     }
 
     try {
+      // Prova de rendiment: Timestamp abans del xifratge d'entrada
+      final startTime = DateTime.now();
+      if (!kReleaseMode) {
+        debugPrint(
+          'COMENÇANT ENCRIPTACIÓ D\'ENTRADA: ${startTime.toIso8601String()}',
+        );
+      }
+
       // Converteix EntryDataModel a JSON string
       final plaintext = _entryDataToJson(entryData.toJson());
 
       // Xifra el contingut
       final nonce = generateNonce();
       final box = _encryptAEAD(plaintext, _vaultSession!.dek, nonce);
+
+      // Prova de rendiment: Timestamp després del xifratge d'entrada
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+      if (!kReleaseMode) {
+        debugPrint(
+          'FINALITZANT ENCRIPTACIÓ D\'ENTRADA: ${endTime.toIso8601String()}',
+        );
+        debugPrint(
+          'DURACIÓ: ${duration.inMilliseconds}ms (${duration.inMicroseconds}μs)',
+        );
+      }
 
       return EntryModel(id: entryId, data: box);
     } catch (e) {
@@ -169,11 +211,31 @@ class CryptoService {
     }
 
     try {
+      // Prova de rendiment: Timestamp abans del desxifratge d'entrada
+      final startTime = DateTime.now();
+      if (!kReleaseMode) {
+        debugPrint(
+          'COMENÇANT DECRIPTACIÓ DE LES ENTRADES: ${startTime.toIso8601String()}',
+        );
+      }
+
       // Desxifra el contingut
       final plaintext = _decryptAEAD(entryModel.data, _vaultSession!.dek);
 
       // Converteix de JSON string a Map
       final dataMap = _entryDataFromJson(plaintext);
+
+      // Prova de rendiment: Timestamp després del desxifratge d'entrada
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+      if (!kReleaseMode) {
+        debugPrint(
+          'FINALITZANT DECRIPTACIÓ DE LES ENTRADES: ${endTime.toIso8601String()}',
+        );
+        debugPrint(
+          'DURACIÓ: ${duration.inMilliseconds}ms (${duration.inMicroseconds}μs)',
+        );
+      }
 
       // Retorna EntryDataModel
       return EntryDataModel.fromJson(dataMap).copyWith(id: entryModel.id);
@@ -244,7 +306,9 @@ class CryptoService {
 
       final encrypter = Encrypter(AES(key, mode: AESMode.gcm));
 
-      return encrypter.decrypt(encrypted, iv: iv);
+      final result = encrypter.decrypt(encrypted, iv: iv);
+
+      return result;
     } catch (e) {
       throw CryptoException('Error en AEAD decrypt: $e');
     }

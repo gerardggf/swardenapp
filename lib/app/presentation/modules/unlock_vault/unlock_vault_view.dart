@@ -51,6 +51,7 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
 
     try {
       final unlockVaultUseCase = ref.read(unlockVaultUseCaseProvider);
+
       final result = unlockVaultUseCase.call(
         UnlockVaultParams(
           vaultPassword: _passwordController.text,
@@ -116,7 +117,6 @@ class _UnlockVaultViewState extends ConsumerState<UnlockVaultView> {
     final user = ref.watch(sessionControllerProvider);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Opacity(
