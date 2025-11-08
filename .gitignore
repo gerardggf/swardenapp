@@ -51,3 +51,7 @@ lib/app/core/generated/
 *.mocks.dart
 
 # L'arxius del keystore d'Android ja s'inclou en el .gitignore dle projecte d'Android
+# Claus de signatura (NO pujar al repositori)
+/android/key.properties
+/android/app/*.jks
+/android/app/*.keystore
