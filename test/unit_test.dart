@@ -3,6 +3,7 @@ import 'package:swardenapp/app/data/services/crypto_service.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 
 void main() {
+  /// Tests unitaris per a CryptoService
   group('CryptoService Tests', () {
     late CryptoService cryptoService;
 

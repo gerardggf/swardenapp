@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Drecera per accedir als estils de text del tema
+// Extensions per obtenir estils de text des del context de Flutter
+
 extension TextStylesExtension on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
 

@@ -1,3 +1,4 @@
+/// Classe que conté les constants de configuració criptogràfica utilitzades a l'aplicació
 class Crypto {
   const Crypto._();
 

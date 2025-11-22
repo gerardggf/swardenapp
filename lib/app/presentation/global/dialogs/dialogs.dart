@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 
+/// Classe que conté diàlegs globals reutilitzables
 class SwardenDialogs {
   SwardenDialogs._();
 
@@ -68,6 +69,7 @@ class SwardenDialogs {
         false;
   }
 
+  /// Diàleg per introduir text
   static Future<String?> textFieldDialog({
     required BuildContext context,
     required String text,
@@ -80,7 +82,7 @@ class SwardenDialogs {
     }
     return await showDialog(
       context: context,
-      builder: (_) => EnterTextDialog(
+      builder: (_) => _EnterTextDialog(
         text: text,
         hintText: hintText,
         currentText: currentText,
@@ -89,9 +91,8 @@ class SwardenDialogs {
   }
 }
 
-class EnterTextDialog extends StatefulWidget {
-  const EnterTextDialog({
-    super.key,
+class _EnterTextDialog extends StatefulWidget {
+  const _EnterTextDialog({
     required this.text,
     required this.hintText,
     this.currentText,
@@ -102,10 +103,10 @@ class EnterTextDialog extends StatefulWidget {
   final String? currentText;
 
   @override
-  State<EnterTextDialog> createState() => _EnterTextDialogState();
+  State<_EnterTextDialog> createState() => _EnterTextDialogState();
 }
 
-class _EnterTextDialogState extends State<EnterTextDialog> {
+class _EnterTextDialogState extends State<_EnterTextDialog> {
   final TextEditingController textController = TextEditingController();
 
   @override

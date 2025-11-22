@@ -6,6 +6,7 @@ import 'package:swardenapp/app/core/extensions/text_theme_extension.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 
+/// Widget que mostra una targeta d'informació
 class InfoCardWidget extends StatefulWidget {
   const InfoCardWidget({
     super.key,

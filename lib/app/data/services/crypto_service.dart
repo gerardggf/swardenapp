@@ -12,8 +12,10 @@ import 'package:swardenapp/app/core/exceptions/locked_exception.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/presentation/controllers/vault_session.dart';
 
+/// Proveïdor del servei de lesoperacions criptogràfiques
 final cryptoServiceProvider = Provider<CryptoService>((ref) => CryptoService());
 
+/// Servei per gestionar les operacions criptogràfiques
 class CryptoService {
   VaultSession? _vaultSession;
 

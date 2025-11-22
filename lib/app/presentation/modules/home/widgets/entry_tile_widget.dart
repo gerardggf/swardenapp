@@ -4,6 +4,7 @@ import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import '../../../../domain/models/entry_model.dart';
 
+/// Widget que representa una entrada individual en la llista d'entrades
 class EntryTileWidget extends StatelessWidget {
   final EntryDataModel entry;
   final VoidCallback? onTap;

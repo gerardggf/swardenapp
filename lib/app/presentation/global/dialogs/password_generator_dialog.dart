@@ -6,6 +6,7 @@ import 'package:swardenapp/app/core/constants/colors.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 
+/// Diàleg per generar contrasenyes
 Future<String?> showPasswordGeneratorDialog(
   BuildContext context, {
   bool copyPswdOption = false,
@@ -13,23 +14,23 @@ Future<String?> showPasswordGeneratorDialog(
   final generatedPassword = await showDialog<String>(
     context: context,
     builder: (context) =>
-        PasswordGeneratorDialog(copyPswdOption: copyPswdOption),
+        _PasswordGeneratorDialog(copyPswdOption: copyPswdOption),
   );
 
   return generatedPassword;
 }
 
-class PasswordGeneratorDialog extends StatefulWidget {
-  const PasswordGeneratorDialog({super.key, required this.copyPswdOption});
+class _PasswordGeneratorDialog extends StatefulWidget {
+  const _PasswordGeneratorDialog({required this.copyPswdOption});
 
   final bool copyPswdOption;
 
   @override
-  State<PasswordGeneratorDialog> createState() =>
+  State<_PasswordGeneratorDialog> createState() =>
       _PasswordGeneratorDialogState();
 }
 
-class _PasswordGeneratorDialogState extends State<PasswordGeneratorDialog> {
+class _PasswordGeneratorDialogState extends State<_PasswordGeneratorDialog> {
   String _generatedPassword = '';
   int _length = 16;
   bool _useUppercase = true;

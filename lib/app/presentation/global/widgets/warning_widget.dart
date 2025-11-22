@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 
+/// Widget que mostra una advertència
 class WarningWidget extends StatelessWidget {
   const WarningWidget({
     super.key,

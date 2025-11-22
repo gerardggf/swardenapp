@@ -2,21 +2,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swardenapp/app/domain/repos/auth_repo.dart';
 import 'package:swardenapp/app/domain/repos/entries_repo.dart';
 
-// Auth Use Cases
+// Casos d'ús d'autenticació
 import 'auth/sign_in_use_case.dart';
 import 'auth/register_user_use_case.dart';
 import 'auth/sign_out_use_case.dart';
 import 'auth/get_current_user_use_case.dart';
 import 'auth/delete_account_use_case.dart';
 
-// Entries Use Cases
+// Casos d'ús d'entrades
 import 'entries/get_user_entries_use_case.dart';
 import 'entries/create_entry_use_case.dart';
 import 'entries/update_entry_use_case.dart';
 import 'entries/delete_entry_use_case.dart';
 import 'entries/unlock_vault_use_case.dart';
 
-// Auth Use Case Providers
+// Proveïdors dels casos d'ús d'autenticació -------------------
+
 final signInUseCaseProvider = Provider<SignInUseCase>(
   (ref) => SignInUseCase(ref.watch(authRepoProvider)),
 );
@@ -37,7 +38,8 @@ final deleteAccountUseCaseProvider = Provider<DeleteAccountUseCase>(
   (ref) => DeleteAccountUseCase(ref.watch(authRepoProvider)),
 );
 
-// Entries Use Case Providers
+// Proveïdors dels casos d'ús d'entrades -------------------
+
 final getUserEntriesUseCaseProvider = Provider<GetUserEntriesUseCase>(
   (ref) => GetUserEntriesUseCase(ref.watch(entriesRepoProvider)),
 );

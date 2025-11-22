@@ -5,6 +5,7 @@ import 'package:swardenapp/app/data/services/crypto_service.dart';
 import 'package:swardenapp/app/data/services/firestore_entry_service.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 
+/// Proveïdor del repositori d'entrades d'usuari
 final entriesRepoProvider = Provider<EntriesRepo>(
   (ref) => EntriesRepoImpl(
     cryptoService: ref.watch(cryptoServiceProvider),
@@ -12,6 +13,7 @@ final entriesRepoProvider = Provider<EntriesRepo>(
   ),
 );
 
+/// Repositori per gestionar les entrades de l'usuari
 abstract class EntriesRepo {
   /// Obté totes les entrades de l'usuari actual
   AsyncSwardenResult<List<EntryDataModel>> getEntries(String userId);

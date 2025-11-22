@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Classe que conté les constants de colors utilitzades a l'aplicació
 class AppColors {
   AppColors._();
 

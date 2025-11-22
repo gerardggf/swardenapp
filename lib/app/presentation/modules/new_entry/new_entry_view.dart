@@ -16,6 +16,7 @@ import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';
 import 'package:swardenapp/app/presentation/modules/home/home_view.dart';
 
+/// Vista per crear una nova entrada
 class NewEntryView extends ConsumerStatefulWidget {
   static const String routeName = 'new-entry';
 

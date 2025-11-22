@@ -16,6 +16,7 @@ import 'package:swardenapp/app/presentation/global/functions/validators.dart';
 import 'package:swardenapp/app/presentation/global/widgets/warning_widget.dart';
 import 'package:swardenapp/app/presentation/modules/splash_view.dart';
 
+/// Vista per desbloquejar la bóveda
 class UnlockVaultView extends ConsumerStatefulWidget {
   static const String routeName = 'unlock-vault';
 

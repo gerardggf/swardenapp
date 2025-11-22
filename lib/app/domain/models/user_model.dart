@@ -1,3 +1,4 @@
+/// Model de dades per a l'usuari
 class UserModel {
   // Informació de Firebase Auth
   final String uid;

@@ -12,6 +12,7 @@ import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/modules/auth/register_view.dart';
 import '../../controllers/session_controller.dart';
 
+/// Vista per a la pantalla d'inici de sessió
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swardenapp/app/core/generated/translations.g.dart';
 
+/// Diàleg per seleccionar l'idioma de l'aplicació
 Future<AppLocale?> showLanguageDialog(BuildContext context) async {
   ListTile buildLanguageTile(String text, AppLocale locale) => ListTile(
     leading: const Icon(Icons.language),

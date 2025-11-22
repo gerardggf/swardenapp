@@ -1,5 +1,6 @@
 import '../../../core/generated/translations.g.dart';
 
+/// Classe que conté funcions de validació per a formularis
 class Validators {
   Validators._();
 

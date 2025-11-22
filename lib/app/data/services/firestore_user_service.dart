@@ -4,6 +4,7 @@ import 'package:swardenapp/app/core/constants/collections.dart';
 import 'package:swardenapp/app/core/global_providers.dart';
 import 'package:swardenapp/app/domain/models/user_model.dart';
 
+/// Proveïdor del servei d'usuaris de Firestore
 final firestoreUserServiceProvider = Provider<FirestoreUserService>(
   (ref) =>
       FirestoreUserService(firestore: ref.watch(firebaseFirestoreProvider)),

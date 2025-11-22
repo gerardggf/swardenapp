@@ -9,6 +9,7 @@ import 'package:swardenapp/app/domain/use_cases/auth/get_current_user_use_case.d
 import 'package:swardenapp/app/domain/use_cases/auth/delete_account_use_case.dart';
 import '../../domain/models/user_model.dart';
 
+/// Proveidor del controlador de sessió de l'usuari
 final sessionControllerProvider =
     StateNotifierProvider<SessionController, UserModel?>(
       (ref) => SessionController(
@@ -21,6 +22,7 @@ final sessionControllerProvider =
       ),
     );
 
+/// Controlador per gestionar l'estat de la sessió de l'usuari
 class SessionController extends StateNotifier<UserModel?> {
   final SignInUseCase signInUseCase;
   final RegisterUserUseCase registerUserUseCase;

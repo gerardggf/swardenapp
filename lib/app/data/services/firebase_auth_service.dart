@@ -6,10 +6,12 @@ import 'package:swardenapp/app/core/typedefs.dart';
 import 'package:swardenapp/app/core/utils/either/either.dart';
 import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 
+/// Proveïdor del servei d'autenticació de Firebase
 final firebaseAuthServiceProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(auth: ref.watch(firebaseAuthProvider)),
 );
 
+/// Servei per gestionar l'autenticació amb Firebase
 class FirebaseAuthService {
   final FirebaseAuth auth;
 

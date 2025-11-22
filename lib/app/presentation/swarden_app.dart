@@ -41,7 +41,7 @@ class SwardenApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Observar el locale actual des del language controller
+    // Observar el idioma actual des del [LanguageController]
     final currentLocale = ref.watch(languageControllerProvider);
 
     return MaterialApp.router(

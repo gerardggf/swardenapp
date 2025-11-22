@@ -16,6 +16,7 @@ import 'package:swardenapp/app/presentation/modules/edit_entry/edit_entry_view.d
 import 'package:swardenapp/app/presentation/modules/entry/widgets/info_card_widget.dart';
 import 'package:swardenapp/app/presentation/modules/home/home_view.dart';
 
+/// Vista per mostrar els detalls d'una entrada
 class EntryView extends ConsumerStatefulWidget {
   static const String routeName = 'entry';
 

@@ -4,6 +4,7 @@ import 'package:swardenapp/app/core/generated/translations.g.dart';
 import 'package:swardenapp/app/data/services/preferences_service.dart';
 import 'package:swardenapp/app/domain/repos/language_preferences_repo.dart';
 
+/// Implementació del repositori de preferències d'idioma
 class LanguagePreferencesRepoImpl implements LanguagePreferencesRepo {
   final PreferencesService _preferencesService;
 

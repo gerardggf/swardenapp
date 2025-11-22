@@ -15,6 +15,7 @@ import 'package:swardenapp/app/presentation/global/widgets/back_button.dart';
 import 'package:swardenapp/app/presentation/global/widgets/warning_widget.dart';
 import '../../controllers/session_controller.dart';
 
+/// Vista per a la pantalla de registre d'usuari
 class RegisterView extends ConsumerStatefulWidget {
   const RegisterView({super.key});
 

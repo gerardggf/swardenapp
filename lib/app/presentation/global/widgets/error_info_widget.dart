@@ -3,6 +3,7 @@ import 'package:swardenapp/app/core/extensions/num_to_sizedbox_extensions.dart';
 
 import '../../../core/generated/translations.g.dart';
 
+/// Widget general per mostrar informació d'error
 class ErrorInfoWidget extends StatelessWidget {
   const ErrorInfoWidget({super.key, this.text, this.color, this.icon});
 

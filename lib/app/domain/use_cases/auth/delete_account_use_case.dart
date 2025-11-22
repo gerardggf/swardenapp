@@ -3,12 +3,6 @@ import 'package:swardenapp/app/domain/repos/auth_repo.dart';
 import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 import 'package:swardenapp/app/domain/use_cases/base_use_case.dart';
 
-class DeleteAccountParams {
-  final String password;
-
-  DeleteAccountParams({required this.password});
-}
-
 /// Cas d'ús per eliminar el compte d'usuari
 class DeleteAccountUseCase implements UseCase<bool, DeleteAccountParams> {
   final AuthRepo authRepo;
@@ -31,4 +25,10 @@ class DeleteAccountUseCase implements UseCase<bool, DeleteAccountParams> {
       return Either.left(SwardenException.undefined(message: e.toString()));
     }
   }
+}
+
+class DeleteAccountParams {
+  final String password;
+
+  DeleteAccountParams({required this.password});
 }

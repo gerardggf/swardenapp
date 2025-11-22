@@ -7,6 +7,7 @@ import 'package:swardenapp/app/domain/models/entry_model.dart';
 import 'package:swardenapp/app/domain/repos/entries_repo.dart';
 import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.dart';
 
+/// Implementació del repositori per gestionar les entrades de l'usuari
 class EntriesRepoImpl implements EntriesRepo {
   final FirestoreEntryService firestoreEntryService;
   final CryptoService cryptoService;

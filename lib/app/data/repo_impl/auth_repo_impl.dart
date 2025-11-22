@@ -9,6 +9,7 @@ import '../services/firebase_auth_service.dart';
 import '../services/firestore_user_service.dart';
 import '../services/crypto_service.dart';
 
+/// Implementació del repositori d'autenticació d'usuaris
 class AuthRepoImpl implements AuthRepo {
   final FirebaseAuthService firebaseAuthService;
   final FirestoreUserService firestoreService;

@@ -2,6 +2,8 @@ import 'package:swardenapp/app/core/utils/swarden_exceptions/swarden_exceptions.
 
 import '../generated/translations.g.dart';
 
+// Extensions per convertir codis d'error i textos d'excepcions Swarden
+
 extension StringSwardenExceptionsExtension on String {
   /// Converteix codis d'error de Firebase a excepcions Swarden
   SwardenException fromFirebaseError() {

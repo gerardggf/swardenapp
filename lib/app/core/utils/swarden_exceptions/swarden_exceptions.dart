@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'swarden_exceptions.freezed.dart';
 
+/// Excepcions específiques de la app de Swarden per a la gestió d'errors
 @freezed
 class SwardenException with _$SwardenException {
   const factory SwardenException.emailAlreadyExists() = EmailAlreadyExists;

@@ -14,6 +14,7 @@ import 'package:swardenapp/app/presentation/global/dialogs/dialogs.dart';
 import 'package:swardenapp/app/presentation/global/dialogs/language_dialog.dart';
 import 'package:swardenapp/app/presentation/global/dialogs/password_generator_dialog.dart';
 
+/// Barra lateral personalitzada de l'aplicació Swarden
 class SwardenDrawer extends ConsumerWidget {
   const SwardenDrawer({super.key});
 

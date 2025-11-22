@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swardenapp/app/core/constants/collections.dart';
 import 'package:swardenapp/app/domain/models/entry_model.dart';
 
+/// Proveïdor del servei d'entrades de Firestore
 final firestoreEntryServiceProvider = Provider<FirestoreEntryService>((ref) {
   return FirestoreEntryService(firestore: FirebaseFirestore.instance);
 });

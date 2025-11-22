@@ -1,3 +1,4 @@
+/// Classe que conté les URLs constants utilitzades a l'aplicació
 class Urls {
   const Urls._();
 

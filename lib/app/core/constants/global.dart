@@ -1,3 +1,4 @@
+/// Classe que conté les constants globals utilitzades a l'aplicació
 class Global {
   const Global._();
 

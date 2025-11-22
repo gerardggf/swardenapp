@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'either.freezed.dart';
 
+/// Classe genèrica per representar un valor que pot ser d'un tipus o d'un altre
 @freezed
 abstract class Either<L, R> with _$Either<L, R> {
   factory Either.left(L value) = Left;

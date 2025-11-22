@@ -22,6 +22,7 @@ import 'package:swardenapp/app/presentation/modules/home/swarden_drawer.dart';
 import 'package:swardenapp/app/presentation/modules/home/widgets/entry_tile_widget.dart';
 import 'package:swardenapp/app/presentation/modules/new_entry/new_entry_view.dart';
 
+/// Proveïdor per obtenir la llista d'entrades de l'usuari actual
 final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
   final userId = ref.watch(sessionControllerProvider)?.uid;
   if (userId == null) {
@@ -36,6 +37,7 @@ final entriesFutureProvider = FutureProvider<List<EntryDataModel>>((ref) async {
   return result.when(left: (_) => [], right: (r) => r);
 });
 
+/// Vista principal de l'aplicació on es mostren les entrades de l'usuari
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 

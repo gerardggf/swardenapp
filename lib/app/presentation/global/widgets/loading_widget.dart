@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Widget que mostra una indicació de càrrega
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key, this.color});
 

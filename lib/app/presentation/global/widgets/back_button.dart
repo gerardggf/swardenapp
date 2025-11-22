@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// Botó de retrocés personalitzat
 class SwardenBackButton extends StatelessWidget {
   const SwardenBackButton({super.key});
 
