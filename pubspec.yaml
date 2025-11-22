@@ -3,7 +3,9 @@ description: "Gestor de contrasenyes Open Source amb Flutter"
 
 publish_to: 'none'
 
-version: 1.0.0+3
+## Versió producció: 1.0.0+1
+## Versió prova interna: 1.0.1+4
+version: 1.0.1+4
 
 environment:
   sdk: ^3.9.2
