@@ -27,4 +27,4 @@ Veure documents **LICENSE.MD** i **CONTRIBUTING.MD**.
 
 ## Contacte
 
-Correu electrònic: **ggutiflo@gmail.com**
+Correu electrònic: **swardenapp@gmail.com**
