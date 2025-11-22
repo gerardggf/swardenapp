@@ -21,14 +21,13 @@ Gràcies per voler contribuir a Swarden! Aquest document explica com reportar pr
 
 ## Estàndards de codi
 
-- Segueix els linters definits al repositori.
-- Mantén la compatibilitat i no trenquis APIs públiques sense justificació.
+- Mantingues la compatibilitat i no trenquis APIs públiques sense justificació.
 - Respecta la nomenclatura i els comentaris.
 
 
 ## Llicència de contribucions
 
-Al enviar un PR, acceptes que la teva contribució es publiqui sota la llicència del projecte (Apache 2.0). No aportis contingut que no puguis llicenciar.
+Al enviar una PR, acceptes que la teva contribució es publiqui sota la llicència del projecte (Apache 2.0). No aportis contingut que no puguis llicenciar.
 
 
 Gràcies per fer Swarden millor!
