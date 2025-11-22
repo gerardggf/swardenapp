@@ -1,5 +1,5 @@
 name: swardenapp
-description: "Gestor de contrasenyes Open Source amb Flutter"
+description: "Gestor de contrasenyes Open Source E2EE (Argon2id + AES-256-GCM) per Android i iOS"
 
 publish_to: 'none'
 
