@@ -5,7 +5,7 @@ publish_to: 'none'
 
 ## Versió producció: 1.0.0+1
 ## Versió prova interna: 1.0.1+4
-version: 1.0.1+4
+version: 1.0.1+5
 
 environment:
   sdk: ^3.9.2
