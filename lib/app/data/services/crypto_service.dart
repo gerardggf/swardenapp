@@ -177,7 +177,7 @@ class CryptoService {
       final startTime = DateTime.now();
       if (!kReleaseMode) {
         debugPrint(
-          'COMENÇANT ENCRIPTACIÓ D\'ENTRADA: ${startTime.toIso8601String()}',
+          'COMENÇANT EL XIFRATGE D\'ENTRADA: ${startTime.toIso8601String()}',
         );
       }
 
@@ -193,7 +193,7 @@ class CryptoService {
       final duration = endTime.difference(startTime);
       if (!kReleaseMode) {
         debugPrint(
-          'FINALITZANT ENCRIPTACIÓ D\'ENTRADA: ${endTime.toIso8601String()}',
+          'FINALITZANT EL XIFRATGE D\'ENTRADA: ${endTime.toIso8601String()}',
         );
         debugPrint(
           'DURACIÓ: ${duration.inMilliseconds}ms (${duration.inMicroseconds}μs)',

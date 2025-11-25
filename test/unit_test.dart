@@ -41,7 +41,7 @@ void main() {
       expect(cryptoService.isVaultUnlocked, isFalse);
     });
 
-    test('Encriptar i desencriptar entrada', () {
+    test('Xifrar i desxifrar entrada', () {
       const password = 'testPassword123';
       final (salt, dekBox) = cryptoService.createUserVault(password);
       cryptoService.unlock(password, salt, dekBox);
@@ -66,7 +66,7 @@ void main() {
       expect(decryptedEntry.password, equals(originalEntry.password));
     });
 
-    test('Fallar encriptar amb bóveda sense desbloquejar', () {
+    test('Fallar al xifrar amb bóveda sense desbloquejar', () {
       final entry = EntryDataModel(
         title: 'Test Title',
         username: 'testuser',

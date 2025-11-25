@@ -23,7 +23,7 @@
     "passwordRequired": "Contraseña *",
     "passwordHint": "Introduce la contraseña",
     "updateEntry": "Actualizar Entrada",
-    "requiredFieldsInfo": "Todos los campos son obligatorios. Los datos se encriptarán de forma segura.",
+    "requiredFieldsInfo": "Todos los campos son obligatorios. Los datos se cifraran de forma segura.",
     "newEntry": "Nueva Entrada",
     "generalInfo": "Información General",
     "entryTitle": "Título de la entrada",

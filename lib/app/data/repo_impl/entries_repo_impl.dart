@@ -23,7 +23,7 @@ class EntriesRepoImpl implements EntriesRepo {
       // Es genera un ID aleatori per al document
       final docId = cryptoService.generateId();
 
-      // S'encripta l'entrada i s'assigna el document a l'ID generat
+      // Es xifra l'entrada i s'assigna el document a l'ID generat
       final encryptedData = cryptoService.encryptEntryData(entry, docId);
 
       // Es desa l'entrada a Firestore amb l'ID generat
@@ -55,12 +55,12 @@ class EntriesRepoImpl implements EntriesRepo {
   @override
   AsyncSwardenResult<List<EntryDataModel>> getEntries(String userId) async {
     try {
-      // Es recuperen les entrades encriptades de Firestore
+      // Es recuperen les entrades xifrades de Firestore
       final encryptedResults = await firestoreEntryService.getUserEntries(
         userId,
       );
 
-      // Es desencripten les entrades abans de retornar-les
+      // Es desxifren les entrades abans de retornar-les
       final results = encryptedResults.map((e) {
         return cryptoService.decryptEntryData(e);
       }).toList();
@@ -80,7 +80,7 @@ class EntriesRepoImpl implements EntriesRepo {
     EntryDataModel entry,
   ) async {
     try {
-      // S'encripta l'entrada modificada
+      // Es xifra l'entrada modificada
       final encryptedData = cryptoService.encryptEntryData(entry, entryId);
 
       // S'actualitza l'entrada a Firestore

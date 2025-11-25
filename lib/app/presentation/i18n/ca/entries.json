@@ -23,7 +23,7 @@
     "passwordRequired": "Contrasenya *",
     "passwordHint": "Introdueix la contrasenya",
     "updateEntry": "Actualitzar Entrada",
-    "requiredFieldsInfo": "Tots els camps són obligatoris. Les dades s'encriptaran de forma segura.",
+    "requiredFieldsInfo": "Tots els camps són obligatoris. Les dades es xifraran de forma segura.",
     "newEntry": "Nova Entrada",
     "generalInfo": "Informació General",
     "entryTitle": "Títol de l'entrada",

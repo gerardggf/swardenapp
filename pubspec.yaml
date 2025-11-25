@@ -3,9 +3,9 @@ description: "Gestor de contrasenyes Open Source E2EE (Argon2id + AES-256-GCM) p
 
 publish_to: 'none'
 
-## Versió producció: 1.0.0+1
-## Versió prova interna: 1.0.1+4
-version: 1.0.1+5
+## Versió producció: 1.0.1+5
+## Versió prova interna: 1.0.1+5
+version: 1.0.1+6
 
 environment:
   sdk: ^3.9.2
